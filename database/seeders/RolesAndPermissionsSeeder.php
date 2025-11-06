@@ -6,6 +6,13 @@ use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
+/**
+ * Summary of RolesAndPermissionsSeeder
+ * @author Tiago França
+ * @copyright (c) 2025
+ *
+ * @suppress PHP0413
+ */
 class RolesAndPermissionsSeeder extends Seeder
 {
     /**
