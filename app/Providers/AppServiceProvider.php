@@ -2,11 +2,8 @@
 
 namespace App\Providers;
 
+use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Support\ServiceProvider;
-use Laravel\Boost\Install\CodeEnvironment\ClaudeCode;
-use Laravel\Boost\Install\CodeEnvironment\OpenCode;
-use Laravel\Boost\Boost;
-use Laravel\Boost\BoostManager;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -23,19 +20,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        $this->boostLoadEnvironments();
-    }
-
-    public function boostLoadEnvironments(): void
-    {
-        $boostEnvs = app(BoostManager::class)->getCodeEnvironments();
-
-        if (!array_key_exists('claudecode', $boostEnvs)) {
-            Boost::registerCodeEnvironment('claudecode', ClaudeCode::class);
-        }
-
-        if (!array_key_exists('opencode', $boostEnvs)) {
-            Boost::registerCodeEnvironment('opencode', OpenCode::class);
-        }
+        ResetPassword::createUrlUsing(fn (object $notifiable, string $token) => config('app.frontend_url') . "/password-reset/{$token}?email={$notifiable->getEmailForPasswordReset()}");
     }
 }
