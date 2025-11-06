@@ -15,6 +15,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        // Seed roles and permissions first
+        $this->call(RolesAndPermissionsSeeder::class);
+
         $initialUsers = [
             [
                 'name' => 'Admin',
@@ -23,15 +26,20 @@ class DatabaseSeeder extends Seeder
             ],
         ];
 
-        foreach ($initialUsers as $user) {
-            $user = User::factory()->make($user);
+        foreach ($initialUsers as $userData) {
+            $user = User::factory()->make($userData);
 
-            User::updateOrCreate([
+            $user = User::updateOrCreate([
                 'email' => $user->email,
             ], [
                 ...$user->toArray(),
                 'password' => 'power@123',
             ]);
+
+            // Assign super_admin role to admin user
+            if ($user->email === 'admin@mail.com') {
+                $user->assignRole('super_admin');
+            }
         }
     }
 }
