@@ -12,7 +12,22 @@ return new class() extends Migration {
     {
         Schema::create('document_validations', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('account_id')->constrained('accounts')->onDelete('cascade');
+            $table->string('document_type', 20)->comment('CPF or CNPJ');
+            $table->string('document_number', 14);
+            $table->string('status', 50)->comment('pending, validated, rejected');
+            $table->json('validation_data')->nullable()->comment('Data from validation service');
+            $table->text('rejection_reason')->nullable();
+            $table->foreignId('validated_by')->nullable()->comment('Staff user ID who validated/rejected');
+            $table->timestamp('validated_at')->nullable();
             $table->timestamps();
+            $table->softDeletes();
+
+            $table->index('account_id');
+            $table->index('document_type');
+            $table->index('document_number');
+            $table->index('status');
+            $table->index('validated_at');
         });
     }
 

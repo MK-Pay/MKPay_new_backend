@@ -12,7 +12,14 @@ return new class() extends Migration {
     {
         Schema::create('account_types', function (Blueprint $table) {
             $table->id();
+            $table->string('code', 10)->unique()->comment('PF or PJ');
+            $table->string('name', 50)->comment('Individual or Business');
+            $table->text('description')->nullable();
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
+
+            $table->index('code');
+            $table->index('is_active');
         });
     }
 
