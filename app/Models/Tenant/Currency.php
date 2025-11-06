@@ -2,6 +2,7 @@
 
 namespace App\Models\Tenant;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
@@ -41,6 +42,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class Currency extends Model
 {
+    use HasFactory;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -67,6 +70,14 @@ class Currency extends Model
             'is_active' => 'boolean',
             'is_national' => 'boolean',
         ];
+    }
+
+    /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory(): \Database\Factories\CurrencyFactory
+    {
+        return \Database\Factories\CurrencyFactory::new();
     }
 
     /**

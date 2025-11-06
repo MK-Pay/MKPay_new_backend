@@ -2,6 +2,7 @@
 
 namespace App\Models\Tenant;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -49,6 +50,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
  */
 class Wallet extends Model
 {
+    use HasFactory;
     use LogsActivity;
     use SoftDeletes;
 
@@ -87,6 +89,14 @@ class Wallet extends Model
                 $wallet->uuid = (string) Str::uuid();
             }
         });
+    }
+
+    /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory(): \Database\Factories\WalletFactory
+    {
+        return \Database\Factories\WalletFactory::new();
     }
 
     /**

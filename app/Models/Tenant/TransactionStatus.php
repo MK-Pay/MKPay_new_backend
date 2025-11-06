@@ -2,6 +2,7 @@
 
 namespace App\Models\Tenant;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
@@ -33,6 +34,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class TransactionStatus extends Model
 {
+    use HasFactory;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -57,6 +60,14 @@ class TransactionStatus extends Model
             'is_final' => 'boolean',
             'is_active' => 'boolean',
         ];
+    }
+
+    /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory(): \Database\Factories\TransactionStatusFactory
+    {
+        return \Database\Factories\TransactionStatusFactory::new();
     }
 
     /**

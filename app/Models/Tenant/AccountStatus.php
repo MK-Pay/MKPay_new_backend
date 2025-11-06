@@ -2,6 +2,7 @@
 
 namespace App\Models\Tenant;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
@@ -39,6 +40,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class AccountStatus extends Model
 {
+    use HasFactory;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -69,6 +72,14 @@ class AccountStatus extends Model
             'holds_funds' => 'boolean',
             'is_active' => 'boolean',
         ];
+    }
+
+    /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory(): \Database\Factories\AccountStatusFactory
+    {
+        return \Database\Factories\AccountStatusFactory::new();
     }
 
     /**

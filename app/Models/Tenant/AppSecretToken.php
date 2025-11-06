@@ -2,6 +2,7 @@
 
 namespace App\Models\Tenant;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -46,6 +47,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
  */
 class AppSecretToken extends Model
 {
+    use HasFactory;
     use LogsActivity;
     use SoftDeletes;
 
@@ -103,6 +105,14 @@ class AppSecretToken extends Model
             ])
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs();
+    }
+
+    /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory(): \Database\Factories\AppSecretTokenFactory
+    {
+        return \Database\Factories\AppSecretTokenFactory::new();
     }
 
     /**

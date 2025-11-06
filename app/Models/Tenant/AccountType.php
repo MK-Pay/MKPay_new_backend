@@ -2,6 +2,7 @@
 
 namespace App\Models\Tenant;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
@@ -31,6 +32,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class AccountType extends Model
 {
+    use HasFactory;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -53,6 +56,14 @@ class AccountType extends Model
         return [
             'is_active' => 'boolean',
         ];
+    }
+
+    /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory(): \Database\Factories\AccountTypeFactory
+    {
+        return \Database\Factories\AccountTypeFactory::new();
     }
 
     /**

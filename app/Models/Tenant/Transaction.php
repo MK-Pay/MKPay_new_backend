@@ -2,6 +2,7 @@
 
 namespace App\Models\Tenant;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -73,6 +74,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
  */
 class Transaction extends Model
 {
+    use HasFactory;
     use LogsActivity;
     use SoftDeletes;
 
@@ -125,6 +127,14 @@ class Transaction extends Model
                 $transaction->uuid = (string) Str::uuid();
             }
         });
+    }
+
+    /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory(): \Database\Factories\TransactionFactory
+    {
+        return \Database\Factories\TransactionFactory::new();
     }
 
     /**
