@@ -1,0 +1,213 @@
+####### ENVIRONMENTS #########
+@APP_URL=http://localhost:8000
+@ADMIN_EMAIL=admin@mail.com
+@ADMIN_PASSWORD=power@123
+@ACCOUNT_UUID=
+#######
+
+####### REF LINKS #######
+# Rest requests demos https://raw.githubusercontent.com/Huachao/vscode-restclient/refs/heads/master/README.md
+#######
+
+### Admin Login
+# @name adminLogin
+POST {{APP_URL}}/admin/login HTTP/1.1
+Content-Type: application/json
+Accept: application/json
+
+{
+    "email": "{{ADMIN_EMAIL}}",
+    "password": "{{ADMIN_PASSWORD}}"
+}
+
+### Extract Token
+@token = {{adminLogin.response.body.token}}
+
+####### APPS MANAGEMENT #######
+
+### List All Apps
+GET {{APP_URL}}/admin/apps HTTP/1.1
+Accept: application/json
+Authorization: Bearer {{token}}
+
+### List Apps by Account
+GET {{APP_URL}}/admin/accounts/{{ACCOUNT_UUID}}/apps HTTP/1.1
+Accept: application/json
+Authorization: Bearer {{token}}
+
+### Create App
+# @name createApp
+POST {{APP_URL}}/admin/apps HTTP/1.1
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{token}}
+
+{
+    "account_uuid": "{{ACCOUNT_UUID}}",
+    "name": "E-commerce Integration",
+    "description": "Main store integration for online sales",
+    "settings": {
+        "webhook_enabled": true,
+        "allowed_payment_methods": ["pix", "credit_card"],
+        "auto_approve_transactions": false
+    }
+}
+
+### Extract App ID
+@appId = {{createApp.response.body.data.app_id}}
+
+### Get App Details
+GET {{APP_URL}}/admin/apps/{{appId}} HTTP/1.1
+Accept: application/json
+Authorization: Bearer {{token}}
+
+### Update App
+PUT {{APP_URL}}/admin/apps/{{appId}} HTTP/1.1
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{token}}
+
+{
+    "name": "E-commerce Integration (Updated)",
+    "description": "Updated integration settings",
+    "settings": {
+        "webhook_enabled": true,
+        "allowed_payment_methods": ["pix", "credit_card", "boleto"],
+        "auto_approve_transactions": true,
+        "notification_email": "notifications@store.com"
+    }
+}
+
+### Deactivate App
+POST {{APP_URL}}/admin/apps/{{appId}}/deactivate HTTP/1.1
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{token}}
+
+{
+    "reason": "Temporary maintenance"
+}
+
+### Activate App
+POST {{APP_URL}}/admin/apps/{{appId}}/activate HTTP/1.1
+Accept: application/json
+Authorization: Bearer {{token}}
+
+####### APP SECRET TOKENS MANAGEMENT #######
+
+### List App Tokens
+GET {{APP_URL}}/admin/apps/{{appId}}/tokens HTTP/1.1
+Accept: application/json
+Authorization: Bearer {{token}}
+
+### Create App Secret Token
+# @name createToken
+POST {{APP_URL}}/admin/apps/{{appId}}/tokens HTTP/1.1
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{token}}
+
+{
+    "name": "Production API Key",
+    "permissions": ["transactions.create", "transactions.view", "payments.create"],
+    "expires_at": "2026-12-31T23:59:59Z"
+}
+
+### Extract Token ID and Secret
+@tokenId = {{createToken.response.body.data.id}}
+@tokenSecret = {{createToken.response.body.data.token}}
+
+### Create Read-Only Token
+POST {{APP_URL}}/admin/apps/{{appId}}/tokens HTTP/1.1
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{token}}
+
+{
+    "name": "Read-Only Reporting Token",
+    "permissions": ["transactions.view", "customers.view", "reports.view"]
+}
+
+### Create Full Access Token
+POST {{APP_URL}}/admin/apps/{{appId}}/tokens HTTP/1.1
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{token}}
+
+{
+    "name": "Full Access Admin Token",
+    "permissions": [
+        "transactions.create",
+        "transactions.view",
+        "transactions.refund",
+        "transactions.cancel",
+        "payments.create",
+        "customers.create",
+        "customers.view",
+        "customers.update",
+        "reports.view"
+    ],
+    "expires_at": null
+}
+
+### Get Token Details
+GET {{APP_URL}}/admin/apps/{{appId}}/tokens/{{tokenId}} HTTP/1.1
+Accept: application/json
+Authorization: Bearer {{token}}
+
+### Update Token Permissions
+PUT {{APP_URL}}/admin/apps/{{appId}}/tokens/{{tokenId}} HTTP/1.1
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{token}}
+
+{
+    "permissions": [
+        "transactions.create",
+        "transactions.view",
+        "transactions.refund",
+        "payments.create"
+    ],
+    "expires_at": "2027-01-31T23:59:59Z"
+}
+
+### Revoke Token
+# @note This permanently revokes the token
+DELETE {{APP_URL}}/admin/apps/{{appId}}/tokens/{{tokenId}} HTTP/1.1
+Accept: application/json
+Authorization: Bearer {{token}}
+
+### List Active Tokens Only
+GET {{APP_URL}}/admin/apps/{{appId}}/tokens?status=active HTTP/1.1
+Accept: application/json
+Authorization: Bearer {{token}}
+
+### List Expired Tokens
+GET {{APP_URL}}/admin/apps/{{appId}}/tokens?expired=true HTTP/1.1
+Accept: application/json
+Authorization: Bearer {{token}}
+
+####### APP STATISTICS #######
+
+### Get App Statistics
+GET {{APP_URL}}/admin/apps/{{appId}}/statistics HTTP/1.1
+Accept: application/json
+Authorization: Bearer {{token}}
+
+### Get App Transaction Summary
+GET {{APP_URL}}/admin/apps/{{appId}}/transactions/summary
+    ?from_date=2025-01-01
+    &to_date=2025-12-31 HTTP/1.1
+Accept: application/json
+Authorization: Bearer {{token}}
+
+### Get App Wallet Balance
+GET {{APP_URL}}/admin/apps/{{appId}}/wallet HTTP/1.1
+Accept: application/json
+Authorization: Bearer {{token}}
+
+### Delete App
+# @note This soft deletes the app and all related tokens
+DELETE {{APP_URL}}/admin/apps/{{appId}} HTTP/1.1
+Accept: application/json
+Authorization: Bearer {{token}}

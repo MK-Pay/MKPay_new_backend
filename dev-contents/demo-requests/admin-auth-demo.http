@@ -1,0 +1,106 @@
+####### ENVIRONMENTS #########
+@APP_URL=http://localhost:8000
+@ADMIN_EMAIL=admin@mail.com
+@ADMIN_PASSWORD=power@123
+@STAFF_EMAIL=staff@mail.com
+@STAFF_PASSWORD=password123
+#######
+
+####### REF LINKS #######
+# Rest requests demos https://raw.githubusercontent.com/Huachao/vscode-restclient/refs/heads/master/README.md
+#######
+
+####### ADMIN AUTHENTICATION #######
+
+### Admin Login
+# @name adminLogin
+POST {{APP_URL}}/admin/login HTTP/1.1
+Content-Type: application/json
+Accept: application/json
+
+{
+    "email": "{{ADMIN_EMAIL}}",
+    "password": "{{ADMIN_PASSWORD}}"
+}
+
+### Extract Admin Token
+@adminToken = {{adminLogin.response.body.token}}
+
+### Admin User Info
+GET {{APP_URL}}/admin/user HTTP/1.1
+Accept: application/json
+Authorization: Bearer {{adminToken}}
+
+### Staff Login
+# @name staffLogin
+POST {{APP_URL}}/admin/login HTTP/1.1
+Content-Type: application/json
+Accept: application/json
+
+{
+    "email": "{{STAFF_EMAIL}}",
+    "password": "{{STAFF_PASSWORD}}"
+}
+
+### Extract Staff Token
+@staffToken = {{staffLogin.response.body.token}}
+
+### Admin Logout
+POST {{APP_URL}}/admin/logout HTTP/1.1
+Accept: application/json
+Authorization: Bearer {{adminToken}}
+
+####### ADMIN USER MANAGEMENT #######
+
+### List Admin Users
+GET {{APP_URL}}/admin/users HTTP/1.1
+Accept: application/json
+Authorization: Bearer {{adminToken}}
+
+### Create Admin User
+# @name createAdminUser
+POST {{APP_URL}}/admin/users HTTP/1.1
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{adminToken}}
+
+{
+    "name": "New Admin User",
+    "email": "newadmin@mail.com",
+    "password": "password123",
+    "password_confirmation": "password123",
+    "role": "admin"
+}
+
+### Get Admin User Details
+@newAdminUserId = {{createAdminUser.response.body.data.id}}
+GET {{APP_URL}}/admin/users/{{newAdminUserId}} HTTP/1.1
+Accept: application/json
+Authorization: Bearer {{adminToken}}
+
+### Update Admin User
+PUT {{APP_URL}}/admin/users/{{newAdminUserId}} HTTP/1.1
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{adminToken}}
+
+{
+    "name": "Updated Admin User",
+    "role": "manager"
+}
+
+### Assign Role to User
+POST {{APP_URL}}/admin/users/{{newAdminUserId}}/roles HTTP/1.1
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{adminToken}}
+
+{
+    "role": "financial"
+}
+
+### Delete Admin User
+# @note This permanently deletes the user
+DELETE {{APP_URL}}/admin/users/{{newAdminUserId}} HTTP/1.1
+Accept: application/json
+Authorization: Bearer {{adminToken}}

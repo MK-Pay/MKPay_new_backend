@@ -1,0 +1,411 @@
+####### ENVIRONMENTS #########
+@API_URL=http://localhost:8000/api/v1
+@APP_ID=your-app-id-here
+@APP_SECRET_TOKEN=your-secret-token-here
+#######
+
+####### REF LINKS #######
+# Rest requests demos https://raw.githubusercontent.com/Huachao/vscode-restclient/refs/heads/master/README.md
+# Integration API uses app_id + app_secret_token for authentication
+#######
+
+####### AUTHENTICATION #######
+# All requests must include X-App-Id and X-App-Secret headers
+
+####### PAYMENTS #######
+
+### Create PIX Payment
+# @name createPixPayment
+POST {{API_URL}}/payments HTTP/1.1
+Content-Type: application/json
+Accept: application/json
+X-App-Id: {{APP_ID}}
+X-App-Secret: {{APP_SECRET_TOKEN}}
+
+{
+    "amount": 150.00,
+    "currency": "BRL",
+    "payment_method": "pix",
+    "description": "Payment for Order #12345",
+    "customer": {
+        "name": "Maria Santos",
+        "email": "maria@example.com",
+        "cpf": "12345678901"
+    },
+    "metadata": {
+        "order_id": "12345",
+        "product": "Premium Subscription"
+    }
+}
+
+### Extract Payment UUID
+@paymentUuid = {{createPixPayment.response.body.data.uuid}}
+
+### Create Credit Card Payment
+POST {{API_URL}}/payments HTTP/1.1
+Content-Type: application/json
+Accept: application/json
+X-App-Id: {{APP_ID}}
+X-App-Secret: {{APP_SECRET_TOKEN}}
+
+{
+    "amount": 299.90,
+    "currency": "BRL",
+    "payment_method": "credit_card",
+    "description": "Purchase of Product XYZ",
+    "customer": {
+        "name": "João Silva",
+        "email": "joao@example.com",
+        "cpf": "98765432100"
+    },
+    "card": {
+        "number": "4111111111111111",
+        "holder_name": "JOAO SILVA",
+        "expiry_month": "12",
+        "expiry_year": "2027",
+        "cvv": "123"
+    },
+    "installments": 3,
+    "metadata": {
+        "cart_id": "cart_{{$guid}}",
+        "items_count": 2
+    }
+}
+
+### Get Payment Status
+GET {{API_URL}}/payments/{{paymentUuid}} HTTP/1.1
+Accept: application/json
+X-App-Id: {{APP_ID}}
+X-App-Secret: {{APP_SECRET_TOKEN}}
+
+### List Payments
+GET {{API_URL}}/payments
+    ?status=completed
+    &payment_method=pix
+    &from_date=2025-01-01
+    &to_date={{$datetime iso8601}}
+    &per_page=50 HTTP/1.1
+Accept: application/json
+X-App-Id: {{APP_ID}}
+X-App-Secret: {{APP_SECRET_TOKEN}}
+
+####### TRANSACTIONS #######
+
+### Get Transaction Details
+GET {{API_URL}}/transactions/{{paymentUuid}} HTTP/1.1
+Accept: application/json
+X-App-Id: {{APP_ID}}
+X-App-Secret: {{APP_SECRET_TOKEN}}
+
+### List Transactions
+GET {{API_URL}}/transactions
+    ?type=payment
+    &status=completed
+    &per_page=100 HTTP/1.1
+Accept: application/json
+X-App-Id: {{APP_ID}}
+X-App-Secret: {{APP_SECRET_TOKEN}}
+
+### Cancel Payment
+POST {{API_URL}}/payments/{{paymentUuid}}/cancel HTTP/1.1
+Content-Type: application/json
+Accept: application/json
+X-App-Id: {{APP_ID}}
+X-App-Secret: {{APP_SECRET_TOKEN}}
+
+{
+    "reason": "Customer requested cancellation"
+}
+
+### Refund Payment
+POST {{API_URL}}/payments/{{paymentUuid}}/refund HTTP/1.1
+Content-Type: application/json
+Accept: application/json
+X-App-Id: {{APP_ID}}
+X-App-Secret: {{APP_SECRET_TOKEN}}
+
+{
+    "amount": 150.00,
+    "reason": "Product not delivered",
+    "metadata": {
+        "refund_request_id": "REF-{{$timestamp}}"
+    }
+}
+
+### Partial Refund
+POST {{API_URL}}/payments/{{paymentUuid}}/refund HTTP/1.1
+Content-Type: application/json
+Accept: application/json
+X-App-Id: {{APP_ID}}
+X-App-Secret: {{APP_SECRET_TOKEN}}
+
+{
+    "amount": 50.00,
+    "reason": "Partial refund for damaged item"
+}
+
+####### CUSTOMERS #######
+
+### Create Customer
+# @name createCustomer
+POST {{API_URL}}/customers HTTP/1.1
+Content-Type: application/json
+Accept: application/json
+X-App-Id: {{APP_ID}}
+X-App-Secret: {{APP_SECRET_TOKEN}}
+
+{
+    "name": "Ana Costa",
+    "email": "ana.costa@example.com",
+    "cpf": "11122233344",
+    "phone": "+5511987654321",
+    "metadata": {
+        "customer_type": "premium",
+        "registered_at": "{{$datetime iso8601}}"
+    }
+}
+
+### Extract Customer ID
+@customerId = {{createCustomer.response.body.data.id}}
+
+### Get Customer Details
+GET {{API_URL}}/customers/{{customerId}} HTTP/1.1
+Accept: application/json
+X-App-Id: {{APP_ID}}
+X-App-Secret: {{APP_SECRET_TOKEN}}
+
+### Update Customer
+PUT {{API_URL}}/customers/{{customerId}} HTTP/1.1
+Content-Type: application/json
+Accept: application/json
+X-App-Id: {{APP_ID}}
+X-App-Secret: {{APP_SECRET_TOKEN}}
+
+{
+    "name": "Ana Costa Silva",
+    "phone": "+5511987654399"
+}
+
+### List Customers
+GET {{API_URL}}/customers
+    ?per_page=50
+    &page=1 HTTP/1.1
+Accept: application/json
+X-App-Id: {{APP_ID}}
+X-App-Secret: {{APP_SECRET_TOKEN}}
+
+### Get Customer Payments
+GET {{API_URL}}/customers/{{customerId}}/payments HTTP/1.1
+Accept: application/json
+X-App-Id: {{APP_ID}}
+X-App-Secret: {{APP_SECRET_TOKEN}}
+
+####### BALANCE & WALLET #######
+
+### Get Wallet Balance
+GET {{API_URL}}/wallet/balance HTTP/1.1
+Accept: application/json
+X-App-Id: {{APP_ID}}
+X-App-Secret: {{APP_SECRET_TOKEN}}
+
+### Get Balance by Currency
+GET {{API_URL}}/wallet/balance/BRL HTTP/1.1
+Accept: application/json
+X-App-Id: {{APP_ID}}
+X-App-Secret: {{APP_SECRET_TOKEN}}
+
+### Get Wallet Statement
+GET {{API_URL}}/wallet/statement
+    ?from_date=2025-01-01
+    &to_date={{$datetime iso8601}}
+    &currency=BRL HTTP/1.1
+Accept: application/json
+X-App-Id: {{APP_ID}}
+X-App-Secret: {{APP_SECRET_TOKEN}}
+
+####### TRANSFERS #######
+
+### Create Transfer
+# @name createTransfer
+POST {{API_URL}}/transfers HTTP/1.1
+Content-Type: application/json
+Accept: application/json
+X-App-Id: {{APP_ID}}
+X-App-Secret: {{APP_SECRET_TOKEN}}
+
+{
+    "amount": 500.00,
+    "currency": "BRL",
+    "destination_account": "other-account-uuid",
+    "description": "Transfer for services rendered",
+    "metadata": {
+        "invoice_id": "INV-{{$timestamp}}"
+    }
+}
+
+### Get Transfer Status
+@transferUuid = {{createTransfer.response.body.data.uuid}}
+GET {{API_URL}}/transfers/{{transferUuid}} HTTP/1.1
+Accept: application/json
+X-App-Id: {{APP_ID}}
+X-App-Secret: {{APP_SECRET_TOKEN}}
+
+####### WITHDRAWALS #######
+
+### Create Withdrawal (Only BRL - National Currency)
+# @name createWithdrawal
+POST {{API_URL}}/withdrawals HTTP/1.1
+Content-Type: application/json
+Accept: application/json
+X-App-Id: {{APP_ID}}
+X-App-Secret: {{APP_SECRET_TOKEN}}
+
+{
+    "amount": 1000.00,
+    "currency": "BRL",
+    "bank_account": {
+        "bank_code": "001",
+        "agency": "1234",
+        "account": "12345-6",
+        "account_type": "checking",
+        "holder_name": "Company Name",
+        "holder_document": "12345678000190"
+    },
+    "metadata": {
+        "withdrawal_request_id": "WD-{{$guid}}"
+    }
+}
+
+### Get Withdrawal Status
+@withdrawalUuid = {{createWithdrawal.response.body.data.uuid}}
+GET {{API_URL}}/withdrawals/{{withdrawalUuid}} HTTP/1.1
+Accept: application/json
+X-App-Id: {{APP_ID}}
+X-App-Secret: {{APP_SECRET_TOKEN}}
+
+####### CURRENCY EXCHANGE #######
+
+### Get Exchange Rates
+GET {{API_URL}}/exchange-rates HTTP/1.1
+Accept: application/json
+X-App-Id: {{APP_ID}}
+X-App-Secret: {{APP_SECRET_TOKEN}}
+
+### Get Specific Exchange Rate
+GET {{API_URL}}/exchange-rates/USD/BRL HTTP/1.1
+Accept: application/json
+X-App-Id: {{APP_ID}}
+X-App-Secret: {{APP_SECRET_TOKEN}}
+
+### Create Currency Exchange
+POST {{API_URL}}/exchange HTTP/1.1
+Content-Type: application/json
+Accept: application/json
+X-App-Id: {{APP_ID}}
+X-App-Secret: {{APP_SECRET_TOKEN}}
+
+{
+    "from_currency": "USD",
+    "to_currency": "BRL",
+    "amount": 100.00
+}
+
+####### WEBHOOKS #######
+
+### Create Webhook
+# @name createWebhook
+POST {{API_URL}}/webhooks HTTP/1.1
+Content-Type: application/json
+Accept: application/json
+X-App-Id: {{APP_ID}}
+X-App-Secret: {{APP_SECRET_TOKEN}}
+
+{
+    "url": "https://yourapp.com/webhooks/mkpay",
+    "events": [
+        "payment.created",
+        "payment.completed",
+        "payment.failed",
+        "payment.refunded",
+        "transfer.completed"
+    ],
+    "secret": "your-webhook-secret-{{$guid}}"
+}
+
+### Extract Webhook ID
+@webhookId = {{createWebhook.response.body.data.id}}
+
+### List Webhooks
+GET {{API_URL}}/webhooks HTTP/1.1
+Accept: application/json
+X-App-Id: {{APP_ID}}
+X-App-Secret: {{APP_SECRET_TOKEN}}
+
+### Get Webhook Details
+GET {{API_URL}}/webhooks/{{webhookId}} HTTP/1.1
+Accept: application/json
+X-App-Id: {{APP_ID}}
+X-App-Secret: {{APP_SECRET_TOKEN}}
+
+### Update Webhook
+PUT {{API_URL}}/webhooks/{{webhookId}} HTTP/1.1
+Content-Type: application/json
+Accept: application/json
+X-App-Id: {{APP_ID}}
+X-App-Secret: {{APP_SECRET_TOKEN}}
+
+{
+    "url": "https://yourapp.com/webhooks/mkpay/v2",
+    "events": [
+        "payment.*",
+        "transfer.*",
+        "withdrawal.*"
+    ]
+}
+
+### Test Webhook
+POST {{API_URL}}/webhooks/{{webhookId}}/test HTTP/1.1
+Accept: application/json
+X-App-Id: {{APP_ID}}
+X-App-Secret: {{APP_SECRET_TOKEN}}
+
+### Get Webhook Logs
+GET {{API_URL}}/webhooks/{{webhookId}}/logs
+    ?limit=50 HTTP/1.1
+Accept: application/json
+X-App-Id: {{APP_ID}}
+X-App-Secret: {{APP_SECRET_TOKEN}}
+
+### Delete Webhook
+DELETE {{API_URL}}/webhooks/{{webhookId}} HTTP/1.1
+Accept: application/json
+X-App-Id: {{APP_ID}}
+X-App-Secret: {{APP_SECRET_TOKEN}}
+
+####### REPORTS #######
+
+### Get Transaction Summary
+GET {{API_URL}}/reports/transactions/summary
+    ?from_date=2025-01-01
+    &to_date={{$datetime iso8601}}
+    &group_by=day HTTP/1.1
+Accept: application/json
+X-App-Id: {{APP_ID}}
+X-App-Secret: {{APP_SECRET_TOKEN}}
+
+### Get Revenue Report
+GET {{API_URL}}/reports/revenue
+    ?from_date=2025-01-01
+    &to_date={{$datetime iso8601}}
+    &currency=BRL HTTP/1.1
+Accept: application/json
+X-App-Id: {{APP_ID}}
+X-App-Secret: {{APP_SECRET_TOKEN}}
+
+### Get Payment Methods Report
+GET {{API_URL}}/reports/payment-methods
+    ?from_date=2025-01-01
+    &to_date={{$datetime iso8601}} HTTP/1.1
+Accept: application/json
+X-App-Id: {{APP_ID}}
+X-App-Secret: {{APP_SECRET_TOKEN}}

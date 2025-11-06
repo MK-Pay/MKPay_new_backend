@@ -1,0 +1,8 @@
+*.http
+*.rest
+!*demo*.http
+!*demo*.rest
+!*example*.http
+!*example*.rest
+!*keep*.http
+!*keep*.rest
