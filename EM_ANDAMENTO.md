@@ -70,13 +70,40 @@ Este arquivo contém o planejamento detalhado das próximas etapas de implementa
 
 ## 🚀 Em Andamento
 
-### Fase 2: Controllers da Admin API
+### Fase 2: Controllers da Admin API (50% concluído)
 
 Baseado nos arquivos .http em `dev-contents/demo-requests/admin-*-demo.http`
 
-#### 2.2 Admin Account Controller
-- [ ] **Criar `AdminAccountController`**
-  - Localização: `app/Http/Controllers/Admin/AccountController.php`
+#### 2.2 Admin Account Controller ✅
+- [x] **Criado `AdminAccountController`** - `app/Http/Controllers/Admin/AccountController.php`
+  - ✅ GET /admin/accounts - Listar contas com filtros (type, status, category, search, pagination)
+  - ✅ POST /admin/accounts - Criar conta (validação PF/CPF ou PJ/CNPJ)
+  - ✅ GET /admin/accounts/{uuid} - Detalhes da conta com relationships
+  - ✅ PUT /admin/accounts/{uuid} - Atualizar conta
+  - ✅ DELETE /admin/accounts/{uuid} - Deletar conta (soft delete)
+  - ✅ POST /admin/accounts/{uuid}/suspend - Suspender conta
+  - ✅ POST /admin/accounts/{uuid}/activate - Ativar conta
+  - ✅ POST /admin/accounts/{uuid}/verify - Verificar conta
+  - ✅ GET /admin/accounts/{uuid}/activity - Log de atividades
+
+#### 2.3 Admin App Controller ✅
+- [x] **Criado `AdminAppController`** - `app/Http/Controllers/Admin/AppController.php`
+  - ✅ GET /admin/apps - Listar apps com filtros
+  - ✅ GET /admin/accounts/{accountUuid}/apps - Apps por conta
+  - ✅ POST /admin/apps - Criar app (auto-gera app_id UUID)
+  - ✅ GET /admin/apps/{appId} - Detalhes do app
+  - ✅ PUT /admin/apps/{appId} - Atualizar app
+  - ✅ DELETE /admin/apps/{appId} - Deletar app
+  - ✅ POST /admin/apps/{appId}/activate - Ativar app
+  - ✅ POST /admin/apps/{appId}/deactivate - Desativar app
+  - ✅ GET /admin/apps/{appId}/tokens - Listar tokens
+  - ✅ POST /admin/apps/{appId}/tokens - Criar token (gera token de 64 chars, hash seguro)
+  - ✅ PUT /admin/apps/{appId}/tokens/{tokenId} - Atualizar token
+  - ✅ DELETE /admin/apps/{appId}/tokens/{tokenId} - Revogar token
+
+#### 2.4 Admin Wallet Controller
+- [ ] **Criar `AdminWalletController`**
+  - Localização: `app/Http/Controllers/Admin/WalletController.php`
   - **GET /admin/accounts** - Listar contas com filtros
     - Query params: type, status, category, search, per_page
     - Eager load relationships
@@ -498,7 +525,12 @@ Baseado nos arquivos .http criados anteriormente
 
 - **Fundação**: 100% ✅
 - **Autenticação (Fase 1)**: 100% ✅
-- **Admin API (Fase 2)**: 5% (AuthController criado)
+- **Admin API (Fase 2)**: 50% ✅ (Auth, Account, App controllers completos)
+  - AuthController ✅
+  - AccountController ✅ (9 endpoints)
+  - AppController ✅ (12 endpoints + token management)
+  - WalletController ⏳ (próximo)
+  - TransactionController ⏳ (próximo)
 - **Integration API (Fase 3)**: 0%
 - **Services (Fase 6)**: 0%
 - **Testes (Fase 8)**: 0%
@@ -506,6 +538,9 @@ Baseado nos arquivos .http criados anteriormente
 
 ---
 
-**Última execução**: 2025-11-10 23:45
-**Última ação**: Fase 1 concluída - Sistema de autenticação implementado
-**Commit**: f56ee1f - "Add authentication system for Admin and Integration APIs"
+**Última execução**: 2025-11-11 00:10
+**Última ação**: Fase 2 - 50% concluída (Account e App controllers implementados)
+**Commits**:
+- f56ee1f - Add authentication system for Admin and Integration APIs
+- 07551ea - Update EM_ANDAMENTO.md with Phase 1 completion status
+- 8f6cea8 - Add Admin API controllers for Account and App management
