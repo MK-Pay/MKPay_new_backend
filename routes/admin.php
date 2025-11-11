@@ -3,6 +3,8 @@
 use App\Http\Controllers\Admin\AccountController;
 use App\Http\Controllers\Admin\AppController;
 use App\Http\Controllers\Admin\AuthController;
+use App\Http\Controllers\Admin\TransactionController;
+use App\Http\Controllers\Admin\WalletController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -41,9 +43,16 @@ Route::middleware(['auth:sanctum'])->group(function (): void {
     Route::put('/apps/{appId}/tokens/{tokenId}', [AppController::class, 'updateToken'])->name('apps.tokens.update');
     Route::delete('/apps/{appId}/tokens/{tokenId}', [AppController::class, 'revokeToken'])->name('apps.tokens.revoke');
 
-    // Wallet management routes (to be implemented)
-    // Route::apiResource('wallets', WalletController::class)->parameters(['wallets' => 'uuid']);
+    // Wallet management routes
+    Route::get('/accounts/{accountUuid}/wallets', [WalletController::class, 'byAccount'])->name('accounts.wallets');
+    Route::apiResource('wallets', WalletController::class)->parameters(['wallets' => 'uuid']);
+    Route::get('/wallets/{uuid}/balances', [WalletController::class, 'balances'])->name('wallets.balances');
+    Route::get('/wallets/{uuid}/transactions', [WalletController::class, 'transactions'])->name('wallets.transactions');
+    Route::post('/wallets/{uuid}/adjust', [WalletController::class, 'adjust'])->name('wallets.adjust');
 
-    // Transaction management routes (to be implemented)
-    // Route::apiResource('transactions', TransactionController::class)->parameters(['transactions' => 'uuid']);
+    // Transaction management routes
+    Route::apiResource('transactions', TransactionController::class)->parameters(['transactions' => 'uuid']);
+    Route::post('/transactions/{uuid}/approve', [TransactionController::class, 'approve'])->name('transactions.approve');
+    Route::post('/transactions/{uuid}/reject', [TransactionController::class, 'reject'])->name('transactions.reject');
+    Route::post('/transactions/{uuid}/refund', [TransactionController::class, 'refund'])->name('transactions.refund');
 });
