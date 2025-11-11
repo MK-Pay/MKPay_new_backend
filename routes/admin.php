@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Admin\AccountController;
+use App\Http\Controllers\Admin\AppController;
 use App\Http\Controllers\Admin\AuthController;
 use Illuminate\Support\Facades\Route;
 
@@ -14,23 +16,34 @@ use Illuminate\Support\Facades\Route;
 */
 
 // Authentication routes (no auth required)
-Route::post('/login', [AuthController::class, 'login'])->name('admin.auth.login');
+Route::post('/login', [AuthController::class, 'login'])->name('auth.login');
 
 // Protected admin routes
 Route::middleware(['auth:sanctum'])->group(function (): void {
     // Auth routes
-    Route::post('/logout', [AuthController::class, 'logout'])->name('admin.auth.logout');
-    Route::get('/user', [AuthController::class, 'user'])->name('admin.auth.user');
+    Route::post('/logout', [AuthController::class, 'logout'])->name('auth.logout');
+    Route::get('/user', [AuthController::class, 'user'])->name('auth.user');
 
     // Account management routes
-    // Route::apiResource('accounts', AccountController::class)->names('admin.accounts');
+    Route::apiResource('accounts', AccountController::class)->parameters(['accounts' => 'uuid']);
+    Route::post('/accounts/{uuid}/suspend', [AccountController::class, 'suspend'])->name('accounts.suspend');
+    Route::post('/accounts/{uuid}/activate', [AccountController::class, 'activate'])->name('accounts.activate');
+    Route::post('/accounts/{uuid}/verify', [AccountController::class, 'verify'])->name('accounts.verify');
+    Route::get('/accounts/{uuid}/activity', [AccountController::class, 'activity'])->name('accounts.activity');
 
     // App management routes
-    // Route::apiResource('apps', AppController::class)->names('admin.apps');
+    Route::get('/accounts/{accountUuid}/apps', [AppController::class, 'byAccount'])->name('accounts.apps');
+    Route::apiResource('apps', AppController::class)->parameters(['apps' => 'appId']);
+    Route::post('/apps/{appId}/activate', [AppController::class, 'activate'])->name('apps.activate');
+    Route::post('/apps/{appId}/deactivate', [AppController::class, 'deactivate'])->name('apps.deactivate');
+    Route::get('/apps/{appId}/tokens', [AppController::class, 'tokens'])->name('apps.tokens.index');
+    Route::post('/apps/{appId}/tokens', [AppController::class, 'createToken'])->name('apps.tokens.create');
+    Route::put('/apps/{appId}/tokens/{tokenId}', [AppController::class, 'updateToken'])->name('apps.tokens.update');
+    Route::delete('/apps/{appId}/tokens/{tokenId}', [AppController::class, 'revokeToken'])->name('apps.tokens.revoke');
 
-    // Wallet management routes
-    // Route::apiResource('wallets', WalletController::class)->names('admin.wallets');
+    // Wallet management routes (to be implemented)
+    // Route::apiResource('wallets', WalletController::class)->parameters(['wallets' => 'uuid']);
 
-    // Transaction management routes
-    // Route::apiResource('transactions', TransactionController::class)->names('admin.transactions');
+    // Transaction management routes (to be implemented)
+    // Route::apiResource('transactions', TransactionController::class)->parameters(['transactions' => 'uuid']);
 });
