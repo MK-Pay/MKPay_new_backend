@@ -4,7 +4,7 @@
 
 Este arquivo contém o planejamento detalhado das próximas etapas de implementação do backend MKPay.
 
-**Última atualização:** 2025-11-10
+**Última atualização:** 2025-11-10 23:45
 
 ---
 
@@ -20,68 +20,59 @@ Este arquivo contém o planejamento detalhado das próximas etapas de implementa
 - [x] TenantTestCase para testes com tenant
 - [x] Arquivos de demonstração de API (.http)
 
+## ✅ Concluído (Fase 1: Autenticação e Middleware)
+
+- [x] **Middleware `AuthenticateIntegrationApi`** - Criado em `app/Http/Middleware/AuthenticateIntegrationApi.php`
+  - ✅ Validação de headers `X-App-Id` e `X-App-Secret`
+  - ✅ Busca de App pelo `app_id` (UUID)
+  - ✅ Validação de `app_secret_token` usando Hash::check()
+  - ✅ Verificação se token está ativo e não expirado
+  - ✅ Anexação de app, token e account ao request
+  - ✅ Registro de uso do token (`last_used_at`)
+
+- [x] **Middleware `CheckTokenPermission`** - Criado em `app/Http/Middleware/CheckTokenPermission.php`
+  - ✅ Verificação de permissão necessária para a rota
+  - ✅ Retorno 403 se não tiver permissão
+
+- [x] **Registrar middlewares**
+  - ✅ Adicionado em `bootstrap/app.php`
+  - ✅ Criados aliases: `auth.integration`, `permission`
+
+- [x] **Laravel Sanctum**
+  - ✅ Instalado via composer
+  - ✅ Configuração publicada
+  - ✅ Migrations rodadas
+
+- [x] **Modelo User para admins**
+  - ✅ HasApiTokens trait adicionado em `app/Models/User.php`
+  - ✅ Configurado fillable e hidden
+
+- [x] **Migration para users**
+  - ✅ Tabela central `users` já existia
+  - ✅ Campos: name, email, password, timestamps
+
+- [x] **AdminUserSeeder**
+  - ✅ Criado em `database/seeders/AdminUserSeeder.php`
+  - ✅ Usuário super admin: admin@mail.com / power@123
+
+- [x] **Admin AuthController**
+  - ✅ Criado em `app/Http/Controllers/Admin/AuthController.php`
+  - ✅ **POST /admin/login** - Autenticação com Sanctum token
+  - ✅ **POST /admin/logout** - Revogação de token
+  - ✅ **GET /admin/user** - Dados do usuário autenticado
+
+- [x] **Rotas Admin**
+  - ✅ Criado arquivo `routes/admin.php`
+  - ✅ Registrado em `bootstrap/app.php` com prefixo `/admin`
+  - ✅ Nomeação adequada: `admin.auth.login`, `admin.auth.logout`, `admin.auth.user`
+
 ---
 
 ## 🚀 Em Andamento
 
-### Fase 1: Autenticação e Middleware
-
-#### 1.1 Middleware de Autenticação para Integration API
-- [ ] **Criar middleware `AuthenticateIntegrationApi`**
-  - Localização: `app/Http/Middleware/AuthenticateIntegrationApi.php`
-  - Validar headers `X-App-Id` e `X-App-Secret`
-  - Buscar App pelo `app_id` (UUID)
-  - Validar `app_secret_token` usando Hash::check()
-  - Verificar se token está ativo e não expirado
-  - Verificar permissões do token
-  - Anexar app e account ao request
-  - Registrar uso do token (`last_used_at`)
-
-- [ ] **Criar middleware `CheckTokenPermission`**
-  - Localização: `app/Http/Middleware/CheckTokenPermission.php`
-  - Verificar se o token tem a permissão necessária para a rota
-  - Retornar 403 se não tiver permissão
-
-- [ ] **Registrar middlewares**
-  - Adicionar em `bootstrap/app.php` ou `app/Http/Kernel.php`
-  - Criar aliases: `auth.integration`, `permission`
-
-#### 1.2 Autenticação Admin (Laravel Sanctum)
-- [ ] **Instalar Laravel Sanctum**
-  - `composer require laravel/sanctum`
-  - Publicar configuração
-  - Rodar migrations
-
-- [ ] **Criar modelo User para admins**
-  - Localização: `app/Models/User.php`
-  - Usar HasApiTokens trait
-  - Configurar fillable e hidden
-
-- [ ] **Criar migration para users**
-  - Tabela central `users` (não tenant)
-  - Campos: name, email, password, timestamps
-
-- [ ] **Criar seeder AdminUserSeeder**
-  - Criar usuário super admin padrão
-  - Email: admin@mail.com
-  - Senha: power@123
-
----
-
 ### Fase 2: Controllers da Admin API
 
 Baseado nos arquivos .http em `dev-contents/demo-requests/admin-*-demo.http`
-
-#### 2.1 Admin Auth Controller
-- [ ] **Criar `AdminAuthController`**
-  - Localização: `app/Http/Controllers/Admin/AuthController.php`
-  - **POST /admin/login**
-    - Validar email e password
-    - Retornar token Sanctum
-  - **POST /admin/logout**
-    - Revogar token atual
-  - **GET /admin/user**
-    - Retornar dados do usuário autenticado
 
 #### 2.2 Admin Account Controller
 - [ ] **Criar `AdminAccountController`**
@@ -485,23 +476,36 @@ Baseado nos arquivos .http criados anteriormente
 
 ## 🎯 Próximos Passos Imediatos
 
-1. **Iniciar Fase 1**: Criar middlewares de autenticação
-2. **Iniciar Fase 2**: Criar controllers Admin API
-3. **Iniciar Fase 3**: Criar controllers Integration API
-4. **Iniciar Fase 8**: Escrever testes de integração
+1. ~~**Fase 1: Autenticação e Middleware**~~ ✅ Concluído
+2. **Fase 2: Controllers da Admin API** - Em andamento
+   - Criar AdminAccountController
+   - Criar AdminAppController
+   - Criar AdminWalletController
+   - Criar AdminTransactionController
+3. **Fase 3: Controllers da Integration API**
+   - Criar PaymentController
+   - Criar TransactionController
+   - Criar WalletController
+4. **Fase 6: Services** - Lógica de negócio
+   - WalletService
+   - TransactionService
+   - PaymentService
+5. **Fase 8: Testes de Integração**
 
 ---
 
 ## 📊 Progresso
 
 - **Fundação**: 100% ✅
-- **Autenticação**: 0%
-- **Admin API**: 0%
-- **Integration API**: 0%
-- **Services**: 0%
-- **Testes**: 0%
-- **Documentação**: 0%
+- **Autenticação (Fase 1)**: 100% ✅
+- **Admin API (Fase 2)**: 5% (AuthController criado)
+- **Integration API (Fase 3)**: 0%
+- **Services (Fase 6)**: 0%
+- **Testes (Fase 8)**: 0%
+- **Documentação (Fase 9)**: 0%
 
 ---
 
-**Última execução**: Aguardando início da Fase 1
+**Última execução**: 2025-11-10 23:45
+**Última ação**: Fase 1 concluída - Sistema de autenticação implementado
+**Commit**: f56ee1f - "Add authentication system for Admin and Integration APIs"
