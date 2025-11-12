@@ -1,7 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\System\HealthCheckController;
 
-Route::get('/', fn () => ['Laravel' => app()->version()]);
+Route::any('/', [HealthCheckController::class, 'basicCheckBool']);
 
 require __DIR__ . '/auth.php';

@@ -210,8 +210,8 @@ Baseado em `dev-contents/demo-requests/integration-api-demo.http`
 - [x] **Corrigido `bootstrap/app.php`**
     - ✅ Removida duplicação de rotas admin (/admin e /api/admin)
     - ✅ Simplificada estrutura de grupos de rotas
-    - ✅ Admin API em /admin/* com nomes admin.*
-    - ✅ Integration API em /api/v1/* com nomes api.v1.*
+    - ✅ Admin API em /admin/_ com nomes admin._
+    - ✅ Integration API em /api/v1/_ com nomes api.v1._
     - ✅ Verificado funcionamento com `php artisan route:list`
 
 ### Correção de Testes Tenant

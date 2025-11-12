@@ -42,3 +42,5 @@ compose.yaml
 /local_mkpayments_api
 *.sqlite*
 *.sqlite
+
+.local-aliases.sh
