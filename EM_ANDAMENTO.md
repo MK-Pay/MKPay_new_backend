@@ -68,9 +68,9 @@ Este arquivo contém o planejamento detalhado das próximas etapas de implementa
 
 ---
 
-## 🚀 Em Andamento
+## ✅ Concluído (Fase 2: Admin API Controllers)
 
-### Fase 2: Controllers da Admin API (50% concluído)
+### Fase 2: Controllers da Admin API (100% concluído)
 
 Baseado nos arquivos .http em `dev-contents/demo-requests/admin-*-demo.http`
 
@@ -101,80 +101,48 @@ Baseado nos arquivos .http em `dev-contents/demo-requests/admin-*-demo.http`
   - ✅ PUT /admin/apps/{appId}/tokens/{tokenId} - Atualizar token
   - ✅ DELETE /admin/apps/{appId}/tokens/{tokenId} - Revogar token
 
-#### 2.4 Admin Wallet Controller
-- [ ] **Criar `AdminWalletController`**
-  - Localização: `app/Http/Controllers/Admin/WalletController.php`
-  - **GET /admin/accounts** - Listar contas com filtros
-    - Query params: type, status, category, search, per_page
-    - Eager load relationships
-    - Retornar paginado
-  - **POST /admin/accounts** - Criar conta
-    - Validar dados (account_type, name, email, cpf/cnpj, phone)
-    - Gerar UUID automaticamente
-    - Validar unicidade de email/cpf/cnpj
-    - Retornar conta criada
-  - **GET /admin/accounts/{uuid}** - Detalhes da conta
-    - Buscar por UUID
-    - Eager load: type, category, status, apps, wallets
-  - **PUT /admin/accounts/{uuid}** - Atualizar conta
-    - Validar dados permitidos
-    - Não permitir mudar CPF/CNPJ
-  - **DELETE /admin/accounts/{uuid}** - Deletar conta (soft delete)
-  - **POST /admin/accounts/{uuid}/suspend** - Suspender conta
-    - Mudar status para 'suspended'
-  - **POST /admin/accounts/{uuid}/activate** - Ativar conta
-    - Mudar status para 'active' ou 'verified'
-  - **POST /admin/accounts/{uuid}/verify** - Verificar conta
-    - Marcar `verified_at`
-    - Mudar status para 'verified'
-  - **GET /admin/accounts/{uuid}/activity** - Log de atividades
-    - Usar spatie/laravel-activitylog
+#### 2.4 Admin Wallet Controller ✅
+- [x] **Criado `AdminWalletController`** - `app/Http/Controllers/Admin/WalletController.php`
+  - ✅ GET /admin/wallets - Listar wallets com filtros
+  - ✅ GET /admin/accounts/{accountUuid}/wallets - Listar wallets da conta
+  - ✅ POST /admin/wallets - Criar wallet
+  - ✅ GET /admin/wallets/{uuid} - Detalhes da wallet
+  - ✅ DELETE /admin/wallets/{uuid} - Deletar wallet
+  - ✅ GET /admin/wallets/{uuid}/balances - Histórico de saldos
+  - ✅ GET /admin/wallets/{uuid}/transactions - Transações da wallet
+  - ✅ POST /admin/wallets/{uuid}/adjust - Ajuste manual de saldo
 
-#### 2.3 Admin App Controller
-- [ ] **Criar `AdminAppController`**
-  - Localização: `app/Http/Controllers/Admin/AppController.php`
-  - **GET /admin/accounts/{accountUuid}/apps** - Listar apps da conta
-  - **POST /admin/accounts/{accountUuid}/apps** - Criar app
-    - Gerar `app_id` (UUID) automaticamente
-    - Validar nome e descrição
-  - **GET /admin/apps/{appId}** - Detalhes do app
-    - Buscar por app_id (UUID)
-  - **PUT /admin/apps/{appId}** - Atualizar app
-  - **DELETE /admin/apps/{appId}** - Deletar app
-  - **GET /admin/apps/{appId}/tokens** - Listar tokens do app
-  - **POST /admin/apps/{appId}/tokens** - Criar token
-    - Gerar token aleatório (32 chars)
-    - Hash com Hash::make()
-    - Retornar token em plain text apenas na criação
-    - Validar permissões (array)
-  - **PUT /admin/apps/{appId}/tokens/{tokenId}** - Atualizar token
-    - Permitir mudar: name, permissions, is_active, expires_at
-  - **DELETE /admin/apps/{appId}/tokens/{tokenId}** - Revogar token
+#### 2.5 Admin Transaction Controller ✅
+- [x] **Criado `AdminTransactionController`** - `app/Http/Controllers/Admin/TransactionController.php`
+  - ✅ GET /admin/transactions - Listar transações com filtros
+  - ✅ POST /admin/transactions - Criar transação
+  - ✅ GET /admin/transactions/{uuid} - Detalhes da transação
+  - ✅ PUT /admin/transactions/{uuid} - Atualizar status da transação
+  - ✅ DELETE /admin/transactions/{uuid} - Deletar transação
+  - ✅ POST /admin/transactions/{uuid}/approve - Aprovar transação
+  - ✅ POST /admin/transactions/{uuid}/reject - Rejeitar transação
+  - ✅ POST /admin/transactions/{uuid}/refund - Reembolsar transação
 
-#### 2.4 Admin Wallet Controller
-- [ ] **Criar `AdminWalletController`**
-  - Localização: `app/Http/Controllers/Admin/WalletController.php`
-  - **GET /admin/accounts/{accountUuid}/wallets** - Listar wallets
-  - **POST /admin/accounts/{accountUuid}/wallets** - Criar wallet
-    - Validar moeda
-    - Iniciar balance em 0
-  - **GET /admin/wallets/{walletUuid}** - Detalhes da wallet
-  - **POST /admin/wallets/{walletUuid}/adjust** - Ajuste manual de saldo
-    - Validar amount e reason
-    - Criar transação de ajuste
-    - Atualizar available_balance e held_balance
-  - **GET /admin/wallets/{walletUuid}/balances** - Histórico de saldos
-  - **GET /admin/wallets/{walletUuid}/transactions** - Transações da wallet
+#### 2.6 Services Layer ✅
+- [x] **Criado `WalletService`** - `app/Services/WalletService.php`
+  - ✅ credit() - Creditar fundos na carteira
+  - ✅ debit() - Debitar fundos da carteira
+  - ✅ hold() - Reservar fundos (disponível → retido)
+  - ✅ releaseHold() - Liberar fundos retidos
+  - ✅ transfer() - Transferir entre carteiras
+  - ✅ adjust() - Ajuste manual de saldo (admin)
+  - ✅ getBalanceHistory() - Histórico de saldos
 
-#### 2.5 Admin Transaction Controller
-- [ ] **Criar `AdminTransactionController`**
-  - Localização: `app/Http/Controllers/Admin/TransactionController.php`
-  - **GET /admin/transactions** - Listar transações
-    - Filtros: status, type, account, wallet, date_from, date_to
-  - **GET /admin/transactions/{uuid}** - Detalhes da transação
-  - **POST /admin/transactions/{uuid}/approve** - Aprovar transação
-  - **POST /admin/transactions/{uuid}/reject** - Rejeitar transação
-  - **POST /admin/transactions/{uuid}/refund** - Reembolsar transação
+- [x] **Criado `TransactionService`** - `app/Services/TransactionService.php`
+  - ✅ create() - Criar transação
+  - ✅ updateStatus() - Atualizar status da transação
+  - ✅ refund() - Processar reembolso
+  - ✅ cancel() - Cancelar transação
+  - ✅ Processamento automático por tipo (payment_in, payment_out, transfer, hold, release)
+
+---
+
+## 🚀 Em Andamento
 
 #### 2.6 Admin Document Controller
 - [ ] **Criar `AdminDocumentController`**
@@ -525,22 +493,25 @@ Baseado nos arquivos .http criados anteriormente
 
 - **Fundação**: 100% ✅
 - **Autenticação (Fase 1)**: 100% ✅
-- **Admin API (Fase 2)**: 50% ✅ (Auth, Account, App controllers completos)
+- **Admin API (Fase 2)**: 100% ✅
   - AuthController ✅
   - AccountController ✅ (9 endpoints)
   - AppController ✅ (12 endpoints + token management)
-  - WalletController ⏳ (próximo)
-  - TransactionController ⏳ (próximo)
+  - WalletController ✅ (9 endpoints)
+  - TransactionController ✅ (10 endpoints)
+  - WalletService ✅ (7 métodos)
+  - TransactionService ✅ (5 métodos)
 - **Integration API (Fase 3)**: 0%
-- **Services (Fase 6)**: 0%
+- **Services (Fase 6)**: 50% ✅ (WalletService e TransactionService completos)
 - **Testes (Fase 8)**: 0%
 - **Documentação (Fase 9)**: 0%
 
 ---
 
-**Última execução**: 2025-11-11 00:10
-**Última ação**: Fase 2 - 50% concluída (Account e App controllers implementados)
+**Última execução**: 2025-11-11 09:42
+**Última ação**: Fase 2 - 100% concluída (Todos controllers Admin + WalletService + TransactionService)
 **Commits**:
 - f56ee1f - Add authentication system for Admin and Integration APIs
 - 07551ea - Update EM_ANDAMENTO.md with Phase 1 completion status
 - 8f6cea8 - Add Admin API controllers for Account and App management
+- 45b5577 - Implement Wallet and Transaction admin controllers with service layer
