@@ -142,7 +142,59 @@ Baseado nos arquivos .http em `dev-contents/demo-requests/admin-*-demo.http`
 
 ---
 
+## ✅ Concluído (Fase 3: Integration API)
+
+### Fase 3: Controllers da Integration API (100% concluído)
+
+Baseado em `dev-contents/demo-requests/integration-api-demo.http`
+
+#### 3.1 Integration Payment Controller ✅
+- [x] **Criado `PaymentController`** - `app/Http/Controllers/Api/V1/PaymentController.php`
+  - ✅ GET /api/v1/payments - Listar pagamentos com filtros (status, payment_method, dates)
+  - ✅ POST /api/v1/payments - Criar pagamento (PIX, cartão de crédito/débito)
+  - ✅ GET /api/v1/payments/{uuid} - Status do pagamento
+  - ✅ POST /api/v1/payments/{uuid}/cancel - Cancelar pagamento
+  - ✅ POST /api/v1/payments/{uuid}/refund - Reembolsar pagamento (total ou parcial)
+
+#### 3.2 Integration Transaction Controller ✅
+- [x] **Criado `TransactionController`** - `app/Http/Controllers/Api/V1/TransactionController.php`
+  - ✅ GET /api/v1/transactions - Listar transações (filtros: type, status, dates)
+  - ✅ GET /api/v1/transactions/{uuid} - Detalhes da transação
+
+#### 3.3 Integration Wallet Controller ✅
+- [x] **Criado `WalletController`** - `app/Http/Controllers/Api/V1/WalletController.php`
+  - ✅ GET /api/v1/wallets - Listar wallets da conta
+  - ✅ GET /api/v1/wallets/{uuid} - Detalhes da wallet
+  - ✅ GET /api/v1/wallets/{uuid}/balance - Consultar saldo
+  - ✅ GET /api/v1/wallets/{uuid}/statement - Extrato com histórico de movimentações
+
+#### 3.4 Integration Account Controller ✅
+- [x] **Criado `AccountController`** - `app/Http/Controllers/Api/V1/AccountController.php`
+  - ✅ GET /api/v1/account - Dados da conta autenticada
+  - ✅ PUT /api/v1/account - Atualizar dados da conta
+
+#### 3.5 Integration Webhook Controller ✅
+- [x] **Criado `WebhookController`** - `app/Http/Controllers/Api/V1/WebhookController.php`
+  - ✅ GET /api/v1/webhooks - Listar webhooks configurados
+  - ✅ POST /api/v1/webhooks - Registrar webhook
+  - ✅ GET /api/v1/webhooks/{id} - Detalhes do webhook
+  - ✅ PUT /api/v1/webhooks/{id} - Atualizar webhook
+  - ✅ DELETE /api/v1/webhooks/{id} - Deletar webhook
+  - ✅ POST /api/v1/webhooks/{id}/test - Testar webhook
+  - ✅ GET /api/v1/webhooks/{id}/logs - Logs do webhook
+
+#### 3.6 Rotas e Registro ✅
+- [x] **Criado `routes/integration-api.php`**
+  - ✅ Todas as rotas registradas com prefixo /api/v1
+  - ✅ Middleware auth.integration aplicado
+  - ✅ Nomeação consistente: api.v1.{resource}.{action}
+  - ✅ Registrado em bootstrap/app.php
+
+---
+
 ## 🚀 Em Andamento
+
+### Controllers Opcionais da Admin API (não prioritários para MVP)
 
 #### 2.6 Admin Document Controller
 - [ ] **Criar `AdminDocumentController`**
@@ -168,52 +220,6 @@ Baseado nos arquivos .http em `dev-contents/demo-requests/admin-*-demo.http`
   - **GET /admin/currencies/exchange-rates** - Taxas de câmbio
   - **POST /admin/currencies/exchange-rates** - Criar taxa
   - **PUT /admin/currencies/exchange-rates/{id}** - Atualizar taxa
-
----
-
-### Fase 3: Controllers da Integration API
-
-Baseado em `dev-contents/demo-requests/integration-api-demo.http`
-
-#### 3.1 Integration Payment Controller
-- [ ] **Criar `PaymentController`**
-  - Localização: `app/Http/Controllers/Api/V1/PaymentController.php`
-  - **POST /api/v1/payments** - Criar pagamento
-    - Validar dados do pagamento
-    - Validar saldo disponível (para débito)
-    - Criar transação
-    - Retornar payment details
-  - **GET /api/v1/payments/{id}** - Status do pagamento
-  - **POST /api/v1/payments/{id}/cancel** - Cancelar pagamento
-
-#### 3.2 Integration Transaction Controller
-- [ ] **Criar `TransactionController`**
-  - Localização: `app/Http/Controllers/Api/V1/TransactionController.php`
-  - **GET /api/v1/transactions** - Listar transações
-    - Filtros: status, type, date_from, date_to
-    - Apenas transações da conta autenticada
-  - **GET /api/v1/transactions/{uuid}** - Detalhes da transação
-
-#### 3.3 Integration Wallet Controller
-- [ ] **Criar `WalletController`**
-  - Localização: `app/Http/Controllers/Api/V1/WalletController.php`
-  - **GET /api/v1/wallets** - Listar wallets da conta
-  - **GET /api/v1/wallets/{uuid}** - Detalhes da wallet
-  - **GET /api/v1/wallets/{uuid}/balance** - Consultar saldo
-
-#### 3.4 Integration Account Controller
-- [ ] **Criar `AccountController`**
-  - Localização: `app/Http/Controllers/Api/V1/AccountController.php`
-  - **GET /api/v1/account** - Dados da conta autenticada
-  - **PUT /api/v1/account** - Atualizar dados da conta
-
-#### 3.5 Integration Webhook Controller
-- [ ] **Criar `WebhookController`**
-  - Localização: `app/Http/Controllers/Api/V1/WebhookController.php`
-  - **GET /api/v1/webhooks** - Listar webhooks configurados
-  - **POST /api/v1/webhooks** - Registrar webhook
-  - **PUT /api/v1/webhooks/{id}** - Atualizar webhook
-  - **DELETE /api/v1/webhooks/{id}** - Deletar webhook
 
 ---
 
@@ -501,17 +507,25 @@ Baseado nos arquivos .http criados anteriormente
   - TransactionController ✅ (10 endpoints)
   - WalletService ✅ (7 métodos)
   - TransactionService ✅ (5 métodos)
-- **Integration API (Fase 3)**: 0%
+- **Integration API (Fase 3)**: 100% ✅
+  - PaymentController ✅ (5 endpoints: list, create, show, cancel, refund)
+  - TransactionController ✅ (2 endpoints: list, show)
+  - WalletController ✅ (4 endpoints: list, show, balance, statement)
+  - AccountController ✅ (2 endpoints: show, update)
+  - WebhookController ✅ (7 endpoints: CRUD + test + logs)
+  - Rotas registradas com auth.integration middleware
 - **Services (Fase 6)**: 50% ✅ (WalletService e TransactionService completos)
-- **Testes (Fase 8)**: 0%
+- **Testes (Fase 8)**: 0% ⚠️ (Unit tests failing - tenant schema issue)
 - **Documentação (Fase 9)**: 0%
 
 ---
 
-**Última execução**: 2025-11-11 09:42
-**Última ação**: Fase 2 - 100% concluída (Todos controllers Admin + WalletService + TransactionService)
+**Última execução**: 2025-11-11 10:15
+**Última ação**: Fase 3 - 100% concluída (Integration API com 5 controllers e 20 endpoints)
 **Commits**:
 - f56ee1f - Add authentication system for Admin and Integration APIs
 - 07551ea - Update EM_ANDAMENTO.md with Phase 1 completion status
 - 8f6cea8 - Add Admin API controllers for Account and App management
 - 45b5577 - Implement Wallet and Transaction admin controllers with service layer
+- d2b6f6d - Update EM_ANDAMENTO.md with Phase 2 completion status
+- 8f57741 - Implement Integration API (Phase 3) with payment processing

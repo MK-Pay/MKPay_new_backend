@@ -86,18 +86,20 @@ class RolesAndPermissionsSeeder extends Seeder
         ];
 
         foreach ($permissions as $permission) {
-            Permission::create(['name' => $permission]);
+            Permission::firstOrCreate(['name' => $permission], ['name' => $permission]);
         }
 
         // Create Roles and Assign Permissions
 
         // Super Admin - Full access to everything
-        $superAdmin = Role::create(['name' => 'super_admin']);
-        $superAdmin->givePermissionTo(Permission::all());
+        /** @var Role $superAdmin */
+        $superAdmin = Role::firstOrCreate(['name' => 'super_admin'], ['name' => 'super_admin']);
+        $superAdmin->syncPermissions(Permission::all());
 
         // Admin - System administrator (below super_admin)
-        $admin = Role::create(['name' => 'admin']);
-        $admin->givePermissionTo([
+        /** @var Role $admin */
+        $admin = Role::firstOrCreate(['name' => 'admin'], ['name' => 'admin']);
+        $admin->syncPermissions([
             'accounts.view',
             'accounts.create',
             'accounts.update',
@@ -130,8 +132,9 @@ class RolesAndPermissionsSeeder extends Seeder
         ]);
 
         // Manager - Almost admin with reduced permissions
-        $manager = Role::create(['name' => 'manager']);
-        $manager->givePermissionTo([
+        /** @var Role $manager */
+        $manager = Role::firstOrCreate(['name' => 'manager'], ['name' => 'manager']);
+        $manager->syncPermissions([
             'accounts.view',
             'accounts.create',
             'accounts.update',
@@ -154,8 +157,9 @@ class RolesAndPermissionsSeeder extends Seeder
         ]);
 
         // Financial - Financial operations specialist
-        $financial = Role::create(['name' => 'financial']);
-        $financial->givePermissionTo([
+        /** @var Role $financial */
+        $financial = Role::firstOrCreate(['name' => 'financial'], ['name' => 'financial']);
+        $financial->syncPermissions([
             'accounts.view',
             'transactions.view',
             'transactions.refund',
@@ -169,8 +173,9 @@ class RolesAndPermissionsSeeder extends Seeder
         ]);
 
         // Staff - Support team with specific permissions
-        $staff = Role::create(['name' => 'staff']);
-        $staff->givePermissionTo([
+        /** @var Role $staff */
+        $staff = Role::firstOrCreate(['name' => 'staff'], ['name' => 'staff']);
+        $staff->syncPermissions([
             'accounts.view',
             'documents.validate',
             'apps.view',
