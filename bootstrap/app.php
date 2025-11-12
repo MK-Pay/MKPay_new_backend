@@ -16,6 +16,11 @@ return Application::configure(basePath: dirname(__DIR__))
                 ->middleware('api')
                 ->name('admin.')
                 ->group(base_path('routes/admin.php'));
+
+            Route::prefix('api/v1')
+                ->middleware('api')
+                ->name('api.v1.')
+                ->group(base_path('routes/integration-api.php'));
         },
     )
     ->withMiddleware(function (Middleware $middleware): void {
