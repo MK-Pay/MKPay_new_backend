@@ -203,6 +203,34 @@ Baseado em `dev-contents/demo-requests/integration-api-demo.http`
 
 ---
 
+## ✅ Concluído (Correções e Infraestrutura)
+
+### Correção de Rotas e Configuração
+
+- [x] **Corrigido `bootstrap/app.php`**
+    - ✅ Removida duplicação de rotas admin (/admin e /api/admin)
+    - ✅ Simplificada estrutura de grupos de rotas
+    - ✅ Admin API em /admin/* com nomes admin.*
+    - ✅ Integration API em /api/v1/* com nomes api.v1.*
+    - ✅ Verificado funcionamento com `php artisan route:list`
+
+### Correção de Testes Tenant
+
+- [x] **Corrigida configuração multi-tenancy**
+    - ✅ Adicionada conexão 'central' em config/database.php
+    - ✅ Adicionada conexão 'tenant_template' em config/database.php
+    - ✅ Atualizado config/tenancy.php para usar template explícito
+    - ✅ Corrigido TenantTestCase.php para criar schemas antes de migrations
+    - ✅ Todos os 134 testes unitários passando (Account, App, AppSecretToken, Transaction, Wallet)
+
+### Documentação do Projeto
+
+- [x] **Adicionada convenção de nomes de tabelas em CLAUDE.md**
+    - ✅ Documentado quando usar getTable() para models que fogem da convenção Laravel
+    - ✅ Exemplo: AccountStatus → account_status (singular) requer getTable()
+
+---
+
 ## 🚀 Em Andamento
 
 ### Controllers Opcionais da Admin API (não prioritários para MVP)
@@ -546,13 +574,13 @@ Baseado nos arquivos .http criados anteriormente
     - WebhookController ✅ (7 endpoints: CRUD + test + logs)
     - Rotas registradas com auth.integration middleware
 - **Services (Fase 6)**: 50% ✅ (WalletService e TransactionService completos)
-- **Testes (Fase 8)**: 0% ⚠️ (Unit tests failing - tenant schema issue)
+- **Testes (Fase 8)**: 20% ✅ (Unit tests passing - 134 tests, tenant schema working)
 - **Documentação (Fase 9)**: 0%
 
 ---
 
-**Última execução**: 2025-11-11 10:15
-**Última ação**: Fase 3 - 100% concluída (Integration API com 5 controllers e 20 endpoints)
+**Última execução**: 2025-11-12 (data atual)
+**Última ação**: Correção de configuração de rotas e resolução de problemas de teste
 **Commits**:
 
 - f56ee1f - Add authentication system for Admin and Integration APIs
@@ -561,3 +589,4 @@ Baseado nos arquivos .http criados anteriormente
 - 45b5577 - Implement Wallet and Transaction admin controllers with service layer
 - d2b6f6d - Update EM_ANDAMENTO.md with Phase 2 completion status
 - 8f57741 - Implement Integration API (Phase 3) with payment processing
+- 350298c - Fix route configuration - remove duplication and simplify structure
