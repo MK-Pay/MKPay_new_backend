@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\Accounts\StoreAccountRequest;
+use App\Http\Requests\Admin\Accounts\UpdateAccountRequest;
 use App\Models\Tenant\Account;
 use App\Models\Tenant\AccountCategory;
 use App\Models\Tenant\AccountStatus;
@@ -10,7 +12,6 @@ use App\Models\Tenant\AccountType;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-use Illuminate\Validation\Rule;
 
 class AccountController extends Controller
 {
@@ -73,38 +74,9 @@ class AccountController extends Controller
     /**
      * Store a newly created account.
      */
-    public function store(Request $request): JsonResponse
+    public function store(StoreAccountRequest $request): JsonResponse
     {
-        $validated = $request->validate([
-            'account_type' => ['required', 'string', Rule::in(['PF', 'PJ'])],
-            'account_category' => ['nullable', 'string'],
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'email', 'unique:accounts,email'],
-            'cpf' => ['nullable', 'string', 'size:11', 'unique:accounts,cpf'],
-            'cnpj' => ['nullable', 'string', 'size:14', 'unique:accounts,cnpj'],
-            'phone' => ['required', 'string', 'max:20'],
-            'usage_types' => ['required', 'array'],
-            'usage_types.*' => ['string'],
-            'hourly_transaction_limit' => ['nullable', 'numeric', 'min:0'],
-            'daily_transaction_limit' => ['nullable', 'numeric', 'min:0'],
-        ]);
-
-        // Validate CPF for PF or CNPJ for PJ
-        if ($validated['account_type'] === 'PF' && empty($validated['cpf'])) {
-            return response()->json([
-                'success' => false,
-                'message' => 'CPF is required for individual accounts.',
-                'errors' => ['cpf' => ['CPF is required for account type PF.']],
-            ], 422);
-        }
-
-        if ($validated['account_type'] === 'PJ' && empty($validated['cnpj'])) {
-            return response()->json([
-                'success' => false,
-                'message' => 'CNPJ is required for business accounts.',
-                'errors' => ['cnpj' => ['CNPJ is required for account type PJ.']],
-            ], 422);
-        }
+        $validated = $request->validated();
 
         // Get account type
         $accountType = AccountType::where('code', $validated['account_type'])->first();
@@ -178,7 +150,7 @@ class AccountController extends Controller
     /**
      * Update the specified account.
      */
-    public function update(Request $request, string $uuid): JsonResponse
+    public function update(UpdateAccountRequest $request, string $uuid): JsonResponse
     {
         $account = Account::where('uuid', $uuid)->first();
 
@@ -190,15 +162,7 @@ class AccountController extends Controller
             ], 404);
         }
 
-        $validated = $request->validate([
-            'name' => ['sometimes', 'string', 'max:255'],
-            'email' => ['sometimes', 'email', Rule::unique('accounts', 'email')->ignore($account->id)],
-            'phone' => ['sometimes', 'string', 'max:20'],
-            'usage_types' => ['sometimes', 'array'],
-            'usage_types.*' => ['string'],
-            'hourly_transaction_limit' => ['nullable', 'numeric', 'min:0'],
-            'daily_transaction_limit' => ['nullable', 'numeric', 'min:0'],
-        ]);
+        $validated = $request->validated();
 
         $account->update($validated);
         $account->load(['accountType', 'accountCategory', 'accountStatus']);

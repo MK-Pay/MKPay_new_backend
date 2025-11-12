@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\V1\Payments\CreatePaymentRequest;
 use App\Models\Transaction;
 use App\Models\Wallet;
 use App\Services\TransactionService;
@@ -84,27 +85,9 @@ class PaymentController extends Controller
      *
      * POST /api/v1/payments
      */
-    public function store(Request $request): JsonResponse
+    public function store(CreatePaymentRequest $request): JsonResponse
     {
-        $validated = $request->validate([
-            'amount' => ['required', 'numeric', 'min:0.01'],
-            'currency' => ['required', 'string', 'size:3'],
-            'payment_method' => ['required', 'string', 'in:pix,credit_card,debit_card,boleto'],
-            'description' => ['required', 'string', 'max:255'],
-            'customer' => ['required', 'array'],
-            'customer.name' => ['required', 'string', 'max:255'],
-            'customer.email' => ['required', 'email', 'max:255'],
-            'customer.cpf' => ['nullable', 'string', 'size:11'],
-            'customer.cnpj' => ['nullable', 'string', 'size:14'],
-            'card' => ['nullable', 'array'],
-            'card.number' => ['required_if:payment_method,credit_card', 'string'],
-            'card.holder_name' => ['required_if:payment_method,credit_card', 'string'],
-            'card.expiry_month' => ['required_if:payment_method,credit_card', 'string', 'size:2'],
-            'card.expiry_year' => ['required_if:payment_method,credit_card', 'string', 'size:4'],
-            'card.cvv' => ['required_if:payment_method,credit_card', 'string', 'size:3'],
-            'installments' => ['nullable', 'integer', 'min:1', 'max:12'],
-            'metadata' => ['nullable', 'array'],
-        ]);
+        $validated = $request->validated();
 
         $account = $request->get('account');
         $app = $request->get('app');

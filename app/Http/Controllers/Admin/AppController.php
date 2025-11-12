@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\Apps\CreateTokenRequest;
+use App\Http\Requests\Admin\Apps\StoreAppRequest;
 use App\Models\Tenant\Account;
 use App\Models\Tenant\App;
 use App\Models\Tenant\AppSecretToken;
@@ -81,25 +83,12 @@ class AppController extends Controller
     /**
      * Store a newly created app.
      */
-    public function store(Request $request): JsonResponse
+    public function store(StoreAppRequest $request): JsonResponse
     {
-        $validated = $request->validate([
-            'account_uuid' => ['required', 'string'],
-            'name' => ['required', 'string', 'max:255'],
-            'description' => ['nullable', 'string'],
-            'settings' => ['nullable', 'array'],
-        ]);
+        $validated = $request->validated();
 
         // Find account
         $account = Account::where('uuid', $validated['account_uuid'])->first();
-
-        if (! $account) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Account not found.',
-                'errors' => ['account_uuid' => ['The specified account does not exist.']],
-            ], 422);
-        }
 
         // Create app with UUID
         $app = App::create([
@@ -271,7 +260,7 @@ class AppController extends Controller
     /**
      * Create a new app secret token.
      */
-    public function createToken(Request $request, string $appId): JsonResponse
+    public function createToken(CreateTokenRequest $request, string $appId): JsonResponse
     {
         $app = App::where('app_id', $appId)->first();
 
@@ -283,12 +272,7 @@ class AppController extends Controller
             ], 404);
         }
 
-        $validated = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'permissions' => ['required', 'array'],
-            'permissions.*' => ['string'],
-            'expires_at' => ['nullable', 'date', 'after:now'],
-        ]);
+        $validated = $request->validated();
 
         // Generate a random secure token
         $plainToken = Str::random(64);

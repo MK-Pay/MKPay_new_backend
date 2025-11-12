@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\Wallets\AdjustBalanceRequest;
+use App\Http\Requests\Admin\Wallets\StoreWalletRequest;
 use App\Models\Tenant\Account;
 use App\Models\Tenant\Wallet;
 use App\Services\WalletService;
@@ -205,7 +207,7 @@ class WalletController extends Controller
     /**
      * Manually adjust wallet balance (admin operation).
      */
-    public function adjust(Request $request, string $uuid): JsonResponse
+    public function adjust(AdjustBalanceRequest $request, string $uuid): JsonResponse
     {
         $wallet = Wallet::where('uuid', $uuid)->first();
 
@@ -217,11 +219,7 @@ class WalletController extends Controller
             ], 404);
         }
 
-        $validated = $request->validate([
-            'amount' => ['required', 'numeric', 'not_in:0'],
-            'reason' => ['required', 'string', 'min:10'],
-            'metadata' => ['nullable', 'array'],
-        ]);
+        $validated = $request->validated();
 
         try {
             $balanceRecord = $this->walletService->adjust(
@@ -253,13 +251,9 @@ class WalletController extends Controller
     /**
      * Store a newly created wallet.
      */
-    public function store(Request $request): JsonResponse
+    public function store(StoreWalletRequest $request): JsonResponse
     {
-        $validated = $request->validate([
-            'account_uuid' => ['required', 'string'],
-            'currency_code' => ['required', 'string'],
-            'app_id' => ['nullable', 'string'],
-        ]);
+        $validated = $request->validated();
 
         $account = Account::where('uuid', $validated['account_uuid'])->first();
 

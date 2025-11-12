@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\Transactions\RefundTransactionRequest;
+use App\Http\Requests\Admin\Transactions\StoreTransactionRequest;
 use App\Models\Tenant\Transaction;
 use App\Services\TransactionService;
 use Illuminate\Http\JsonResponse;
@@ -94,19 +96,9 @@ class TransactionController extends Controller
     /**
      * Store a newly created transaction.
      */
-    public function store(Request $request): JsonResponse
+    public function store(StoreTransactionRequest $request): JsonResponse
     {
-        $validated = $request->validate([
-            'type' => ['required', 'string', 'in:payment_in,payment_out,deposit,withdrawal,transfer,hold,release'],
-            'origin_wallet_uuid' => ['nullable', 'string'],
-            'destination_wallet_uuid' => ['nullable', 'string'],
-            'amount' => ['required', 'numeric', 'min:0.01'],
-            'fee' => ['nullable', 'numeric', 'min:0'],
-            'description' => ['nullable', 'string'],
-            'reference' => ['nullable', 'string'],
-            'external_reference' => ['nullable', 'string'],
-            'metadata' => ['nullable', 'array'],
-        ]);
+        $validated = $request->validated();
 
         // Get wallet IDs from UUIDs
         $originWalletId = null;
@@ -338,7 +330,7 @@ class TransactionController extends Controller
     /**
      * Refund a transaction.
      */
-    public function refund(Request $request, string $uuid): JsonResponse
+    public function refund(RefundTransactionRequest $request, string $uuid): JsonResponse
     {
         $transaction = Transaction::where('uuid', $uuid)->first();
 
@@ -350,10 +342,7 @@ class TransactionController extends Controller
             ], 404);
         }
 
-        $validated = $request->validate([
-            'amount' => ['nullable', 'numeric', 'min:0.01'],
-            'reason' => ['required', 'string', 'min:10'],
-        ]);
+        $validated = $request->validated();
 
         try {
             $refundTransaction = $this->transactionService->refund(

@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\V1\Webhooks\StoreWebhookRequest;
+use App\Http\Requests\Api\V1\Webhooks\UpdateWebhookRequest;
 use App\Models\Tenant\Webhook;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -37,16 +39,9 @@ class WebhookController extends Controller
      *
      * POST /api/v1/webhooks
      */
-    public function store(Request $request): JsonResponse
+    public function store(StoreWebhookRequest $request): JsonResponse
     {
-        $validated = $request->validate([
-            'url' => ['required', 'url', 'max:500'],
-            'events' => ['required', 'array', 'min:1'],
-            'events.*' => ['required', 'string', 'max:100'],
-            'secret' => ['nullable', 'string', 'max:255'],
-            'retry_count' => ['nullable', 'integer', 'min:0', 'max:10'],
-            'timeout' => ['nullable', 'integer', 'min:5', 'max:60'],
-        ]);
+        $validated = $request->validated();
 
         $account = $request->get('account');
         $app = $request->get('app');
@@ -104,16 +99,9 @@ class WebhookController extends Controller
      *
      * PUT /api/v1/webhooks/{id}
      */
-    public function update(Request $request, int $id): JsonResponse
+    public function update(UpdateWebhookRequest $request, int $id): JsonResponse
     {
-        $validated = $request->validate([
-            'url' => ['nullable', 'url', 'max:500'],
-            'events' => ['nullable', 'array', 'min:1'],
-            'events.*' => ['required', 'string', 'max:100'],
-            'is_active' => ['nullable', 'boolean'],
-            'retry_count' => ['nullable', 'integer', 'min:0', 'max:10'],
-            'timeout' => ['nullable', 'integer', 'min:5', 'max:60'],
-        ]);
+        $validated = $request->validated();
 
         $account = $request->get('account');
         $app = $request->get('app');
