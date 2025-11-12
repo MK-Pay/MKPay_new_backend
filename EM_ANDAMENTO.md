@@ -231,6 +231,41 @@ Baseado em `dev-contents/demo-requests/integration-api-demo.http`
 
 ---
 
+## ✅ Concluído (Fase 4: Form Requests - Validação)
+
+### Form Requests para Admin API
+
+- [x] **Criados Form Requests para Admin API**
+    - ✅ `Admin/Accounts/StoreAccountRequest.php` - Validação de CPF/CNPJ com algoritmo oficial
+    - ✅ `Admin/Accounts/UpdateAccountRequest.php` - Atualização com validação de unicidade
+    - ✅ `Admin/Apps/StoreAppRequest.php` - Criação de app com validação de conta
+    - ✅ `Admin/Apps/CreateTokenRequest.php` - Criação de token com validação de permissões
+    - ✅ `Admin/Wallets/StoreWalletRequest.php` - Criação de wallet com validação de moeda
+    - ✅ `Admin/Wallets/AdjustBalanceRequest.php` - Ajuste de saldo com motivo obrigatório
+    - ✅ `Admin/Transactions/StoreTransactionRequest.php` - Validação condicional de wallets por tipo
+    - ✅ `Admin/Transactions/RefundTransactionRequest.php` - Reembolso com motivo obrigatório
+
+### Form Requests para Integration API
+
+- [x] **Criados Form Requests para Integration API**
+    - ✅ `Api/V1/Payments/CreatePaymentRequest.php` - Validação complexa de pagamento com cartão
+    - ✅ `Api/V1/Account/UpdateAccountRequest.php` - Atualização de conta com endereço
+    - ✅ `Api/V1/Webhooks/StoreWebhookRequest.php` - Webhook com validação HTTPS e eventos
+    - ✅ `Api/V1/Webhooks/UpdateWebhookRequest.php` - Atualização de webhook
+
+### Funcionalidades Implementadas
+
+- ✅ Mensagens de erro customizadas em português
+- ✅ Validação de CPF/CNPJ usando algoritmos oficiais
+- ✅ Validações condicionais (ex: dados de cartão obrigatórios para pagamento com cartão)
+- ✅ Validação de UUID para todas as chaves estrangeiras
+- ✅ Validações de valor máximo para prevenir overflow
+- ✅ Validações regex para campos formatados (CEP, estado, país)
+- ✅ Validação de eventos válidos para webhooks
+- ✅ Validação de permissões válidas para tokens
+
+---
+
 ## 🚀 Em Andamento
 
 ### Controllers Opcionais da Admin API (não prioritários para MVP)
@@ -265,51 +300,7 @@ Baseado em `dev-contents/demo-requests/integration-api-demo.http`
 
 ---
 
-### Fase 4: Form Requests (Validação)
-
-#### 4.1 Admin Form Requests
-
-- [ ] **Criar form requests para Admin API**
-    - `Admin/Accounts/StoreAccountRequest.php`
-    - `Admin/Accounts/UpdateAccountRequest.php`
-    - `Admin/Apps/StoreAppRequest.php`
-    - `Admin/Apps/StoreTokenRequest.php`
-    - `Admin/Wallets/AdjustBalanceRequest.php`
-    - `Admin/Transactions/RefundRequest.php`
-    - `Admin/Webhooks/StoreWebhookRequest.php`
-
-#### 4.2 Integration Form Requests
-
-- [ ] **Criar form requests para Integration API**
-    - `Api/V1/Payments/CreatePaymentRequest.php`
-    - `Api/V1/Webhooks/StoreWebhookRequest.php`
-    - `Api/V1/Account/UpdateAccountRequest.php`
-
----
-
-### Fase 5: Rotas
-
-#### 5.1 Rotas Admin
-
-- [ ] **Criar arquivo `routes/admin.php`**
-    - Prefixo: `/admin`
-    - Middleware: `auth:sanctum`
-    - Nomear todas as rotas: `admin.{resource}.{action}`
-    - Grupos por recurso (accounts, apps, wallets, transactions)
-
-- [ ] **Registrar rotas admin**
-    - Adicionar em `bootstrap/app.php` ou `routes/web.php`
-
-#### 5.2 Rotas Integration API
-
-- [ ] **Criar arquivo `routes/integration-api.php`**
-    - Prefixo: `/api/v1`
-    - Middleware: `auth.integration`
-    - Nomear rotas: `api.v1.{resource}.{action}`
-    - Grupos por recurso
-
-- [ ] **Registrar rotas integration**
-    - Adicionar em `bootstrap/app.php`
+### Fase 5: Rotas (✅ Já concluída nas Fases 1-3)
 
 ---
 
@@ -573,6 +564,13 @@ Baseado nos arquivos .http criados anteriormente
     - AccountController ✅ (2 endpoints: show, update)
     - WebhookController ✅ (7 endpoints: CRUD + test + logs)
     - Rotas registradas com auth.integration middleware
+- **Form Requests (Fase 4)**: 100% ✅
+    - 8 Form Requests Admin API (Accounts, Apps, Tokens, Wallets, Transactions)
+    - 4 Form Requests Integration API (Payments, Account, Webhooks)
+    - Validação de CPF/CNPJ com algoritmo oficial
+    - Validações condicionais complexas
+    - Mensagens em português
+- **Rotas (Fase 5)**: 100% ✅ (Já concluída nas Fases 1-3)
 - **Services (Fase 6)**: 50% ✅ (WalletService e TransactionService completos)
 - **Testes (Fase 8)**: 20% ✅ (Unit tests passing - 134 tests, tenant schema working)
 - **Documentação (Fase 9)**: 0%
@@ -580,7 +578,7 @@ Baseado nos arquivos .http criados anteriormente
 ---
 
 **Última execução**: 2025-11-12 (data atual)
-**Última ação**: Correção de configuração de rotas e resolução de problemas de teste
+**Última ação**: Implementação completa da Fase 4 - Form Requests com validações robustas
 **Commits**:
 
 - f56ee1f - Add authentication system for Admin and Integration APIs
@@ -590,3 +588,5 @@ Baseado nos arquivos .http criados anteriormente
 - d2b6f6d - Update EM_ANDAMENTO.md with Phase 2 completion status
 - 8f57741 - Implement Integration API (Phase 3) with payment processing
 - 350298c - Fix route configuration - remove duplication and simplify structure
+- e1839cf - Update EM_ANDAMENTO.md with route fixes and test status
+- 2678249 - Implement Form Requests for validation (Phase 4)
