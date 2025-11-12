@@ -176,6 +176,18 @@ protected function isAccessible(User $user, ?string $path = null): bool
 ### Models
 - Casts can and likely should be set in a `casts()` method on a model rather than the `$casts` property. Follow existing conventions from other models.
 
+### Table Names
+- Laravel convention expects table names to be plural snake_case of the model name (e.g., `AccountStatus` → `account_statuses`).
+- When a table name doesn't follow Laravel's convention, explicitly define it using the `getTable()` method in the model.
+- Example: If the table is `account_status` (singular) instead of `account_statuses` (plural):
+
+<code-snippet name="Custom Table Name" lang="php">
+public function getTable()
+{
+    return 'account_status';
+}
+</code-snippet>
+
 
 === mcp/core rules ===
 
