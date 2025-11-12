@@ -2,38 +2,42 @@
 
 namespace Tests;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\Tenant;
 use Illuminate\Support\Facades\DB;
 
 abstract class TenantTestCase extends TestCase
 {
-    use RefreshDatabase;
-
     protected Tenant $tenant;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        // Create and initialize a test tenant
-        $this->tenant = Tenant::create();
-        tenancy()->initialize($this->tenant);
+        // Refresh central database
+        $this->artisan('migrate:fresh', ['--database' => config('tenancy.database.central_connection')]);
 
-        // Ensure tenant schema exists and set search_path for PostgreSQL tenancy
+        // Create a test tenant in the central database
+        $this->tenant = Tenant::create();
+
+        // Create tenant schema in PostgreSQL
         $tenantSchema = 'tenant' . $this->tenant->id;
 
         try {
-            DB::statement("CREATE SCHEMA IF NOT EXISTS \"{$tenantSchema}\"");
-            DB::statement("SET search_path TO \"{$tenantSchema}\", public");
+            DB::connection(config('tenancy.database.central_connection', 'central'))
+                ->statement("CREATE SCHEMA IF NOT EXISTS \"{$tenantSchema}\"");
         } catch (\Throwable $e) {
-            // Ignore if not applicable in test environment
+            // Ignore errors
         }
 
+        // Initialize tenancy
+        tenancy()->initialize($this->tenant);
+
         // Run tenant migrations
-        $this->artisan('tenants:migrate', [
-            '--tenants' => [$this->tenant->id],
-        ])->execute();
+        $this->artisan('migrate', [
+            '--database' => 'tenant',
+            '--path' => 'database/migrations/tenant',
+            '--force' => true,
+        ]);
 
         // Seed tenant configuration data
         $this->seed(\Database\Seeders\TenantConfigSeeder::class);
