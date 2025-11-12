@@ -7,6 +7,7 @@ use App\Http\Requests\Auth\LoginRequest;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Validation\ValidationException;
+use App\Models\User;
 
 class LoginController extends Controller
 {
@@ -36,8 +37,22 @@ class LoginController extends Controller
      */
     public function destroy(Request $request): Response
     {
-        $request->user()->currentAccessToken()->delete();
+        /** @var User */
+        $user = $request->user();
+        $token = $user?->currentAccessToken();
 
-        return response()->noContent();
+        if (!$token) {
+            return response()->noContent(403);
+        }
+
+        if (is_a($token, \Laravel\Sanctum\PersonalAccessToken::class)) {
+            $token->delete();
+            $token->reFresh();
+            $token->fresh();
+
+            return response()->noContent(204);
+        }
+
+        return response()->noContent(422);
     }
 }

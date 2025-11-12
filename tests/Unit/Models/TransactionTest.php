@@ -276,7 +276,7 @@ class TransactionTest extends TenantTestCase
     {
         $transaction = Transaction::factory()->create();
 
-        $this->assertDatabaseHas('activity_log', [
+        $this->assertDatabaseHas(config('activitylog.table_name'), [
             'subject_type' => Transaction::class,
             'subject_id' => $transaction->id,
             'event' => 'created',

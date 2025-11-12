@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Route;
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
         web: __DIR__ . '/../routes/web.php',
-        api: __DIR__ . '/../routes/api.php',
+        api: null,
         commands: __DIR__ . '/../routes/console.php',
         health: '/up',
         then: function (): void {
@@ -17,10 +17,22 @@ return Application::configure(basePath: dirname(__DIR__))
                 ->name('admin.')
                 ->group(base_path('routes/admin.php'));
 
-            Route::prefix('api/v1')
+            Route::prefix('api')
                 ->middleware('api')
-                ->name('api.v1.')
-                ->group(base_path('routes/integration-api.php'));
+                ->name('api.')
+                ->group(function () {
+                    Route::prefix('admin')
+                        ->name('admin.')
+                        ->group(base_path('routes/admin.php'));
+
+                    Route::middleware('api')->group(base_path('routes/api.php'));
+
+                    Route::prefix('v1')->name('v1.')
+                        ->group(function () {
+                            Route::middleware('api')->group(base_path('routes/integration-api.php'));
+                            Route::middleware('api')->group(base_path('routes/api-routes/v1.php'));
+                        });
+                });
         },
     )
     ->withMiddleware(function (Middleware $middleware): void {
@@ -33,8 +45,6 @@ return Application::configure(basePath: dirname(__DIR__))
             'auth.integration' => App\Http\Middleware\AuthenticateIntegrationApi::class,
             'permission' => App\Http\Middleware\CheckTokenPermission::class,
         ]);
-
-        //
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

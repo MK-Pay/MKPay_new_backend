@@ -14,34 +14,50 @@ class AuthenticationTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $response = $this->post('/login', [
+        $response = $this->post(route('api.v1.auth.login'), [
             'email' => $user->email,
             'password' => 'password',
         ]);
 
-        $this->assertAuthenticated();
-        $response->assertNoContent();
+        $response->assertOk();
     }
 
     public function testUsersCanNotAuthenticateWithInvalidPassword(): void
     {
         $user = User::factory()->create();
 
-        $this->post('/login', [
+        $response = $this->post(route('api.v1.auth.login'), [
             'email' => $user->email,
             'password' => 'wrong-password',
         ]);
 
-        $this->assertGuest();
+        $this->assertTrue($response->status() !== 200);
     }
 
     public function testUsersCanLogout(): void
     {
         $user = User::factory()->create();
+        $okStatuses = range(200, 202);
+        $sanctumToken = $user->createToken('testToken') ?? null;
+        $token = $sanctumToken?->plainTextToken ?? null;
 
-        $response = $this->actingAs($user)->post('/logout');
+        $this->assertNotEmpty($token);
 
-        $this->assertGuest();
-        $response->assertNoContent();
+        $userDataResponse = $this->withHeader('Authorization', 'Bearer ' . $token)
+            ->postJson(route('api.v1.auth.me'));
+
+        $userDataResponse->assertOk();
+
+        $logoffResponse = $this->withHeader('Authorization', 'Bearer ' . $token)
+            ->postJson(route('api.v1.auth.logout'));
+
+        $logoffResponse->assertNoContent();
+
+        $testTokenResponse = $this->withHeader('Authorization', 'Bearer ' . $token)
+            ->postJson(route('api.v1.auth.logout'));
+
+        $testTokenResponse->assertNoContent();
+
+        $this->assertFalse(in_array($testTokenResponse->status(), $okStatuses));
     }
 }

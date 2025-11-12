@@ -1,15 +1,6 @@
 {
-    "agents": [
-        "claude_code",
-        "codex",
-        "copilot",
-        "opencode"
-    ],
-    "editors": [
-        "claude_code",
-        "opencode",
-        "vscode"
-    ],
+    "agents": ["claude_code", "codex", "copilot", "opencode"],
+    "editors": ["claude_code", "opencode", "vscode"],
     "guidelines": [],
     "sail": true
 }

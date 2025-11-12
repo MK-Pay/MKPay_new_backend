@@ -175,7 +175,7 @@ class WalletTest extends TenantTestCase
     {
         $wallet = Wallet::factory()->create();
 
-        $this->assertDatabaseHas('activity_log', [
+        $this->assertDatabaseHas(config('activitylog.table_name'), [
             'subject_type' => Wallet::class,
             'subject_id' => $wallet->id,
             'event' => 'created',

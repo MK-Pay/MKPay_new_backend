@@ -77,4 +77,9 @@ class TransactionStatus extends Model
     {
         return $this->hasMany(Transaction::class);
     }
+
+    public function getTable()
+    {
+        return 'transaction_status';
+    }
 }

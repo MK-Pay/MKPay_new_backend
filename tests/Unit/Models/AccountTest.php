@@ -12,9 +12,11 @@ use App\Models\Tenant\Wallet;
 use Illuminate\Support\Str;
 use Spatie\Activitylog\Models\Activity;
 use Tests\TenantTestCase;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 
 class AccountTest extends TenantTestCase
 {
+    use DatabaseMigrations;
     // UUID Auto-generation Tests
 
     public function testUuidIsAutomaticallyGeneratedOnCreation(): void
@@ -248,7 +250,7 @@ class AccountTest extends TenantTestCase
     {
         $account = Account::factory()->create();
 
-        $this->assertDatabaseHas('activity_log', [
+        $this->assertDatabaseHas(config('activitylog.table_name'), [
             'subject_type' => Account::class,
             'subject_id' => $account->id,
             'event' => 'created',

@@ -166,7 +166,7 @@ class AppSecretTokenTest extends TenantTestCase
     {
         $token = AppSecretToken::factory()->create();
 
-        $this->assertDatabaseHas('activity_log', [
+        $this->assertDatabaseHas(config('activitylog.table_name'), [
             'subject_type' => AppSecretToken::class,
             'subject_id' => $token->id,
             'event' => 'created',

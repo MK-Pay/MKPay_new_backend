@@ -5,51 +5,58 @@ This directory contains HTTP request files for testing and demonstrating the MKP
 ## 📁 Available Demo Files
 
 ### Authentication & Admin Management
+
 - **`admin-auth-demo.http`** - Admin authentication and user management
-  - Login/Logout
-  - User CRUD operations
-  - Role assignment
+    - Login/Logout
+    - User CRUD operations
+    - Role assignment
 
 ### Account Management
+
 - **`admin-accounts-demo.http`** - Account management (Admin API)
-  - Create PF (Individual) and PJ (Business) accounts
-  - Account status management (suspend, activate, block, verify)
-  - Document validation workflow
-  - Account activity logs
+    - Create PF (Individual) and PJ (Business) accounts
+    - Account status management (suspend, activate, block, verify)
+    - Document validation workflow
+    - Account activity logs
 
 ### Applications & Tokens
+
 - **`admin-apps-demo.http`** - App and API token management (Admin API)
-  - Create and manage integration apps
-  - Generate API tokens with granular permissions
-  - Token lifecycle (create, update, revoke)
-  - App statistics and monitoring
+    - Create and manage integration apps
+    - Generate API tokens with granular permissions
+    - Token lifecycle (create, update, revoke)
+    - App statistics and monitoring
 
 ### Wallets & Transactions
+
 - **`admin-wallets-demo.http`** - Wallet and transaction management (Admin API)
-  - Wallet balance management
-  - Manual balance adjustments
-  - Transaction approval/rejection
-  - Currency exchange rates
-  - Financial reports
-  - Withdrawal management
+    - Wallet balance management
+    - Manual balance adjustments
+    - Transaction approval/rejection
+    - Currency exchange rates
+    - Financial reports
+    - Withdrawal management
 
 ### Integration API
+
 - **`integration-api-demo.http`** - Public Integration API (for client applications)
-  - Payment creation (PIX, Credit Card)
-  - Transaction management
-  - Customer management
-  - Wallet operations
-  - Currency exchange
-  - Webhook configuration
-  - Reports and analytics
+    - Payment creation (PIX, Credit Card)
+    - Transaction management
+    - Customer management
+    - Wallet operations
+    - Currency exchange
+    - Webhook configuration
+    - Reports and analytics
 
 ### Tenancy
+
 - **`tenants-demo.http`** - Multi-tenancy operations
-  - Tenant creation and management
+    - Tenant creation and management
 
 ## 🚀 Getting Started
 
 ### Prerequisites
+
 1. Install [VSCode](https://code.visualstudio.com/)
 2. Install [REST Client extension](https://marketplace.visualstudio.com/items?itemName=humao.rest-client)
 3. Make sure your Laravel backend is running
@@ -67,6 +74,7 @@ Each `.http` file has environment variables at the top. Update these before runn
 ```
 
 For Integration API, you'll need:
+
 ```http
 @API_URL=http://localhost:8000/api/v1
 @APP_ID=your-app-id-here
@@ -81,6 +89,7 @@ For Integration API, you'll need:
 4. **Chain requests** using the `@name` and variable extraction features
 
 Example of request chaining:
+
 ```http
 ### Create Account
 # @name createAccount
@@ -97,7 +106,9 @@ GET {{APP_URL}}/admin/accounts/{{accountUuid}}
 ## 📝 Request Organization
 
 ### Separating Requests
+
 Use `###` to separate multiple requests:
+
 ```http
 ### First Request
 GET {{APP_URL}}/api/endpoint1
@@ -107,25 +118,31 @@ POST {{APP_URL}}/api/endpoint2
 ```
 
 ### Named Requests
+
 Use `# @name requestName` to reference responses:
+
 ```http
 # @name login
 POST {{APP_URL}}/login
 ```
 
 ### Variables
+
 **File-level variables:**
+
 ```http
 @token = my-token-value
 ```
 
 **Extract from response:**
+
 ```http
 @token = {{login.response.body.token}}
 @userId = {{createUser.response.body.data.id}}
 ```
 
 **System variables:**
+
 - `{{$guid}}` - Generate UUID
 - `{{$timestamp}}` - Current timestamp
 - `{{$datetime iso8601}}` - Current date in ISO 8601 format
@@ -134,12 +151,15 @@ POST {{APP_URL}}/login
 ## 🔐 Authentication
 
 ### Admin API
+
 Uses Bearer token authentication:
+
 ```http
 Authorization: Bearer {{token}}
 ```
 
 Get token from login:
+
 ```http
 # @name login
 POST {{APP_URL}}/admin/login
@@ -155,7 +175,9 @@ Content-Type: application/json
 ```
 
 ### Integration API
+
 Uses custom headers:
+
 ```http
 X-App-Id: {{APP_ID}}
 X-App-Secret: {{APP_SECRET_TOKEN}}
@@ -164,6 +186,7 @@ X-App-Secret: {{APP_SECRET_TOKEN}}
 ## 🎯 Common Workflows
 
 ### 1. Create and Verify an Account
+
 ```
 1. admin-auth-demo.http → Login
 2. admin-accounts-demo.http → Create PF Account
@@ -173,6 +196,7 @@ X-App-Secret: {{APP_SECRET_TOKEN}}
 ```
 
 ### 2. Setup Integration App
+
 ```
 1. admin-auth-demo.http → Login
 2. admin-accounts-demo.http → Create Account
@@ -182,6 +206,7 @@ X-App-Secret: {{APP_SECRET_TOKEN}}
 ```
 
 ### 3. Process a Payment
+
 ```
 1. integration-api-demo.http → Create PIX Payment
 2. integration-api-demo.http → Get Payment Status
@@ -189,6 +214,7 @@ X-App-Secret: {{APP_SECRET_TOKEN}}
 ```
 
 ### 4. Financial Operations
+
 ```
 1. admin-auth-demo.http → Login
 2. admin-wallets-demo.http → List Wallets
@@ -199,22 +225,28 @@ X-App-Secret: {{APP_SECRET_TOKEN}}
 ## 📚 API Documentation
 
 For detailed API documentation, access:
+
 - **Scramble Docs**: `http://localhost:8000/docs/api`
 - **Implementation Spec**: See `@implementar.md` in project root
 
 ## 🛠️ Tips & Tricks
 
 ### 1. Quick Testing
+
 Use VSCode command palette (`Ctrl+Shift+P` / `Cmd+Shift+P`):
+
 - `Rest Client: Send Request`
 - `Rest Client: Cancel Request`
 - `Rest Client: Rerun Last Request`
 
 ### 2. Saving Responses
+
 Click "Save Response" to save the response body to a file for later analysis.
 
 ### 3. Environment Switching
+
 Create multiple environment variables in VSCode settings:
+
 ```json
 {
     "rest-client.environmentVariables": {
@@ -232,12 +264,15 @@ Create multiple environment variables in VSCode settings:
 ```
 
 Then use:
+
 ```http
 @APP_URL = {{$dotenv APP_URL}}
 ```
 
 ### 4. Request Comments
+
 Add notes to requests:
+
 ```http
 # @note This permanently deletes the user
 # @no-redirect
@@ -253,6 +288,7 @@ DELETE {{APP_URL}}/users/{{userId}}
 ## 🤝 Contributing
 
 When adding new endpoints:
+
 1. Create a new `.http` file or add to existing one
 2. Follow the naming convention: `{area}-demo.http`
 3. Include environment variables at the top

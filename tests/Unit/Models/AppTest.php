@@ -192,7 +192,7 @@ class AppTest extends TenantTestCase
     {
         $app = App::factory()->create();
 
-        $this->assertDatabaseHas('activity_log', [
+        $this->assertDatabaseHas(config('activitylog.table_name'), [
             'subject_type' => App::class,
             'subject_id' => $app->id,
             'event' => 'created',

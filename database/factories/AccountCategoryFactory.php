@@ -25,11 +25,9 @@ class AccountCategoryFactory extends Factory
      */
     public function definition(): array
     {
-        $name = fake()->words(2, true);
-
         return [
-            'name' => $name,
-            'slug' => Str::slug($name),
+            'name' => fn () => fake()->words(4, true),
+            'slug' => fn (array $d) => Str::slug($d['name'] ?? Str::random(5)),
             'description' => fake()->sentence(),
             'is_active' => true,
         ];

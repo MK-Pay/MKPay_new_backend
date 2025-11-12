@@ -89,4 +89,9 @@ class AccountStatus extends Model
     {
         return $this->hasMany(Account::class);
     }
+
+    public function getTable()
+    {
+        return 'account_status';
+    }
 }

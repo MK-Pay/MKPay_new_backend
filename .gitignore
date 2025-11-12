@@ -38,3 +38,7 @@ compose.yaml
 !compose.yaml.sail.example
 !compose.yaml*example
 !example*compose.yaml
+
+/local_mkpayments_api
+*.sqlite*
+*.sqlite
