@@ -8,30 +8,25 @@ use Illuminate\Support\Facades\Route;
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
         web: __DIR__ . '/../routes/web.php',
-        api: null,
         commands: __DIR__ . '/../routes/console.php',
         health: '/up',
         then: function (): void {
+            // Admin API Routes - /admin/*
             Route::prefix('admin')
                 ->middleware('api')
                 ->name('admin.')
                 ->group(base_path('routes/admin.php'));
 
-            Route::prefix('api')
+            // Integration API v1 Routes - /api/v1/*
+            Route::prefix('api/v1')
                 ->middleware('api')
-                ->name('api.')
-                ->group(function () {
-                    Route::prefix('admin')
-                        ->name('admin.')
-                        ->group(base_path('routes/admin.php'));
+                ->name('api.v1.')
+                ->group(function (): void {
+                    // Integration API routes (payments, transactions, wallets, webhooks)
+                    require base_path('routes/integration-api.php');
 
-                    Route::middleware('api')->group(base_path('routes/api.php'));
-
-                    Route::prefix('v1')->name('v1.')
-                        ->group(function () {
-                            Route::middleware('api')->group(base_path('routes/integration-api.php'));
-                            Route::middleware('api')->group(base_path('routes/api-routes/v1.php'));
-                        });
+                    // API auth routes (if needed)
+                    require base_path('routes/api-routes/v1.php');
                 });
         },
     )
