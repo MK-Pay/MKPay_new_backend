@@ -8,31 +8,13 @@ use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
- * @property int $id
- * @property int $wallet_id
- * @property int $currency_id
- * @property string $balance
- * @property string $held_balance
- * @property string $available_balance
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read Wallet $wallet
- * @property-read Currency $currency
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Activitylog\Models\Activity> $activities
  * @property-read int|null $activities_count
- *
+ * @property-read Currency|null $currency
+ * @property-read Wallet|null $wallet
  * @method static \Illuminate\Database\Eloquent\Builder<static>|WalletBalance newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|WalletBalance newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|WalletBalance query()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|WalletBalance whereAvailableBalance($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|WalletBalance whereBalance($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|WalletBalance whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|WalletBalance whereCurrencyId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|WalletBalance whereHeldBalance($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|WalletBalance whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|WalletBalance whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|WalletBalance whereWalletId($value)
- *
  * @mixin \Eloquent
  */
 class WalletBalance extends Model

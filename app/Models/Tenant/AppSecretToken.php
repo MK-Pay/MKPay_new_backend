@@ -10,39 +10,16 @@ use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
- * @property int $id
- * @property int $app_id
- * @property string $name
- * @property string $token_hash
- * @property array $permissions
- * @property bool $is_active
- * @property \Illuminate\Support\Carbon|null $last_used_at
- * @property \Illuminate\Support\Carbon|null $expires_at
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property \Illuminate\Support\Carbon|null $deleted_at
- * @property-read App $app
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Activitylog\Models\Activity> $activities
  * @property-read int|null $activities_count
- *
+ * @property-read App|null $app
+ * @method static \Database\Factories\AppSecretTokenFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AppSecretToken newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AppSecretToken newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AppSecretToken onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AppSecretToken query()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|AppSecretToken whereAppId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|AppSecretToken whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|AppSecretToken whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|AppSecretToken whereExpiresAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|AppSecretToken whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|AppSecretToken whereIsActive($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|AppSecretToken whereLastUsedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|AppSecretToken whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|AppSecretToken wherePermissions($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|AppSecretToken whereTokenHash($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|AppSecretToken whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|AppSecretToken withTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|AppSecretToken withTrashed(bool $withTrashed = true)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AppSecretToken withoutTrashed()
- *
  * @mixin \Eloquent
  */
 class AppSecretToken extends Model

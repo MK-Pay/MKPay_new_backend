@@ -7,35 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * @property int $id
- * @property string $code
- * @property string $name
- * @property string|null $description
- * @property bool $allows_transactions
- * @property bool $allows_withdrawals
- * @property bool $allows_transfers
- * @property bool $holds_funds
- * @property bool $is_active
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection<int, Account> $accounts
  * @property-read int|null $accounts_count
- *
+ * @method static \Database\Factories\AccountStatusFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AccountStatus newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AccountStatus newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AccountStatus query()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|AccountStatus whereAllowsTransactions($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|AccountStatus whereAllowsTransfers($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|AccountStatus whereAllowsWithdrawals($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|AccountStatus whereCode($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|AccountStatus whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|AccountStatus whereDescription($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|AccountStatus whereHoldsFunds($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|AccountStatus whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|AccountStatus whereIsActive($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|AccountStatus whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|AccountStatus whereUpdatedAt($value)
- *
  * @mixin \Eloquent
  */
 class AccountStatus extends Model

@@ -7,37 +7,18 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * @property int $id
- * @property string $code
- * @property string $name
- * @property string $symbol
- * @property int $decimal_places
- * @property bool $is_active
- * @property bool $is_national
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, WalletBalance> $walletBalances
- * @property-read int|null $wallet_balances_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, Transaction> $transactions
- * @property-read int|null $transactions_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, CurrencyExchangeRate> $exchangeRatesFrom
  * @property-read int|null $exchange_rates_from_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, CurrencyExchangeRate> $exchangeRatesTo
  * @property-read int|null $exchange_rates_to_count
- *
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, Transaction> $transactions
+ * @property-read int|null $transactions_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, WalletBalance> $walletBalances
+ * @property-read int|null $wallet_balances_count
+ * @method static \Database\Factories\CurrencyFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Currency newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Currency newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Currency query()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Currency whereCode($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Currency whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Currency whereDecimalPlaces($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Currency whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Currency whereIsActive($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Currency whereIsNational($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Currency whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Currency whereSymbol($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Currency whereUpdatedAt($value)
- *
  * @mixin \Eloquent
  */
 class Currency extends Model

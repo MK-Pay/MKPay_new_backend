@@ -12,45 +12,24 @@ use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
- * @property int $id
- * @property string $app_id
- * @property int $account_id
- * @property string $name
- * @property string|null $description
- * @property bool $is_active
- * @property array|null $settings
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property \Illuminate\Support\Carbon|null $deleted_at
- * @property-read Account $account
- * @property-read \Illuminate\Database\Eloquent\Collection<int, AppSecretToken> $secretTokens
- * @property-read int|null $secret_tokens_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, Wallet> $wallets
- * @property-read int|null $wallets_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, Transaction> $transactions
- * @property-read int|null $transactions_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, Webhook> $webhooks
- * @property-read int|null $webhooks_count
+ * @property-read Account|null $account
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Activitylog\Models\Activity> $activities
  * @property-read int|null $activities_count
- *
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, AppSecretToken> $secretTokens
+ * @property-read int|null $secret_tokens_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, Transaction> $transactions
+ * @property-read int|null $transactions_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, Wallet> $wallets
+ * @property-read int|null $wallets_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, Webhook> $webhooks
+ * @property-read int|null $webhooks_count
+ * @method static \Database\Factories\AppFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|App newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|App newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|App onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|App query()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|App whereAccountId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|App whereAppId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|App whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|App whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|App whereDescription($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|App whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|App whereIsActive($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|App whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|App whereSettings($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|App whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|App withTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|App withTrashed(bool $withTrashed = true)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|App withoutTrashed()
- *
  * @mixin \Eloquent
  */
 class App extends Model

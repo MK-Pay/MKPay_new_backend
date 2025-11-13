@@ -12,40 +12,21 @@ use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
- * @property int $id
- * @property string $uuid
- * @property int $account_id
- * @property int|null $app_id
- * @property bool $is_main
- * @property bool $is_active
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property \Illuminate\Support\Carbon|null $deleted_at
- * @property-read Account $account
+ * @property-read Account|null $account
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Activitylog\Models\Activity> $activities
+ * @property-read int|null $activities_count
  * @property-read App|null $app
  * @property-read \Illuminate\Database\Eloquent\Collection<int, WalletBalance> $balances
  * @property-read int|null $balances_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, Transaction> $transactions
  * @property-read int|null $transactions_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Activitylog\Models\Activity> $activities
- * @property-read int|null $activities_count
- *
+ * @method static \Database\Factories\WalletFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Wallet newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Wallet newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Wallet onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Wallet query()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Wallet whereAccountId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Wallet whereAppId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Wallet whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Wallet whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Wallet whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Wallet whereIsActive($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Wallet whereIsMain($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Wallet whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Wallet whereUuid($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Wallet withTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Wallet withTrashed(bool $withTrashed = true)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Wallet withoutTrashed()
- *
  * @mixin \Eloquent
  */
 class Wallet extends Model
@@ -60,8 +41,12 @@ class Wallet extends Model
      * @var list<string>
      */
     protected $fillable = [
+        'uuid',
         'account_id',
         'app_id',
+        'currency_id',
+        'available_balance',
+        'held_balance',
         'is_main',
         'is_active',
     ];
@@ -74,6 +59,8 @@ class Wallet extends Model
     protected function casts(): array
     {
         return [
+            'available_balance' => 'decimal:8',
+            'held_balance' => 'decimal:8',
             'is_main' => 'boolean',
             'is_active' => 'boolean',
         ];
@@ -108,6 +95,9 @@ class Wallet extends Model
             ->logOnly([
                 'account_id',
                 'app_id',
+                'currency_id',
+                'available_balance',
+                'held_balance',
                 'is_main',
                 'is_active',
             ])
@@ -137,6 +127,14 @@ class Wallet extends Model
     public function balances(): HasMany
     {
         return $this->hasMany(WalletBalance::class);
+    }
+
+    /**
+     * Get the currency for the wallet.
+     */
+    public function currency(): BelongsTo
+    {
+        return $this->belongsTo(Currency::class);
     }
 
     /**

@@ -111,4 +111,19 @@ return [
         'address' => env('MAIL_FROM_ADDRESS', 'hello@example.com'),
         'name' => env('MAIL_FROM_NAME', 'Example'),
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Error Reporting Configuration
+    |--------------------------------------------------------------------------
+    |
+    | Configure where error report emails should be sent. This is used by
+    | the exception handler to notify developers of critical errors in
+    | production and staging environments.
+    |
+    */
+
+    'error_reporting' => [
+        'to' => env('MAIL_ERROR_TO', env('MAIL_FROM_ADDRESS', 'hello@example.com')),
+    ],
 ];

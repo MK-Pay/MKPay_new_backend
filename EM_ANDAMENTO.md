@@ -571,14 +571,87 @@ Baseado nos arquivos .http criados anteriormente
     - Validações condicionais complexas
     - Mensagens em português
 - **Rotas (Fase 5)**: 100% ✅ (Já concluída nas Fases 1-3)
-- **Services (Fase 6)**: 50% ✅ (WalletService e TransactionService completos)
+- **Services (Fase 6)**: 100% ✅ (WalletService, TransactionService, PaymentService, DocumentValidationService completos)
+- **Resources (Fase 7)**: 100% ✅ (Admin Resources + Integration Resources com sanitização de dados sensíveis)
 - **Testes (Fase 8)**: 20% ✅ (Unit tests passing - 134 tests, tenant schema working)
+- **Rate Limiting (Fase 10)**: 100% ✅ (Admin: 120/min, Integration: 60/min, Auth: 5/min, Payments: 30/min)
 - **Documentação (Fase 9)**: 0%
 
 ---
 
-**Última execução**: 2025-11-12 (data atual)
-**Última ação**: Implementação completa da Fase 4 - Form Requests com validações robustas
+## ✅ Concluído (Fase 6: Services - Lógica de Negócio)
+
+- [x] **WalletService** - Completo (credit, debit, hold, release, transfer, adjust, balance history)
+- [x] **TransactionService** - Completo (create, updateStatus, refund, cancel)
+- [x] **PaymentService** - Implementado
+    - ✅ createPayment() - Criar transações de pagamento
+    - ✅ processPayment() - Simular processamento (95% success rate)
+    - ✅ handleCallback() - Processar callbacks de gateways
+    - ✅ cancelPayment() - Cancelar pagamentos
+    - ✅ refundPayment() - Reembolsar pagamentos
+    - ✅ getPaymentStatistics() - Estatísticas de pagamentos
+    - ✅ Mapeamento de métodos de pagamento (PIX, cartão crédito/débito, banco)
+    - ✅ Mapeamento de status do gateway para status interno
+    - ✅ Logging em canal 'financial'
+
+- [x] **DocumentValidationService** - Implementado
+    - ✅ validateCPF() - Validação oficial de CPF (11 dígitos + check digits)
+    - ✅ validateCNPJ() - Validação oficial de CNPJ (14 dígitos + check digits)
+    - ✅ checkDocumentExists() - Verificar duplicatas no banco
+    - ✅ formatCPF() / formatCNPJ() - Formatação para exibição
+    - ✅ sanitizeDocument() - Remover caracteres especiais
+    - ✅ detectDocumentType() - Detectar tipo pelo comprimento
+    - ✅ getAccountByDocument() - Buscar conta por documento
+    - ✅ validateAndFormat() - Validação + formatação em um método
+    - ✅ isDocumentAvailable() - Verificar disponibilidade para registro
+
+---
+
+## ✅ Concluído (Fase 7: Resources - API Responses)
+
+### Resources da Admin API (6 implementados)
+- [x] **AccountResource** - Dados completos com relacionamentos (AccountType, AccountStatus, AccountCategory)
+- [x] **AppResource** - App com conta e tokens relacionados
+- [x] **AppSecretTokenResource** - Token com app relacionado (token_hash NUNCA exposto)
+- [x] **WalletResource** - Saldo disponível, retido, totais e estatísticas
+- [x] **TransactionResource** - Transações com todos os relacionamentos aninhados
+- [x] **WebhookResource** - Webhooks com acesso restrito ao secret (apenas admins)
+
+### Resources da Integration API (4 implementados)
+- [x] **PaymentResource** - Dados públicos apenas, sanitização de metadata
+- [x] **TransactionResource** - Dados públicos, sem informações sensíveis
+- [x] **WalletResource** - Saldos e estatísticas (sem limites/configurações)
+- [x] **AccountResource** - Informações públicas (CPF/CNPJ mascarados, sem limites)
+
+**Segurança implementada:**
+- Tokens NUNCA expostos (nem em Admin API, apenas ID)
+- Metadata sanitizada (remove card_number, cvv, password, token, secret)
+- Dados sensíveis mascarados em Integration API
+- CPF/CNPJ não exibidos em API pública
+
+---
+
+## ✅ Concluído (Fase 10: Rate Limiting)
+
+Implementado via RateLimitServiceProvider com 7 limitadores:
+
+- [x] **api** - 60 requests/minuto (padrão)
+- [x] **admin** - 120 requests/minuto (usuário autenticado)
+- [x] **integration** - 60 requests/minuto por token
+- [x] **auth** - 5 tentativas/minuto (proteção contra brute force)
+- [x] **payments** - 30 requisições/minuto (crítico)
+- [x] **webhooks** - 300 requisições/minuto (callbacks)
+- [x] **global** - 1000 requisições/minuto por IP
+
+**Respostas customizadas:**
+- Status 429 com retry_after
+- Mensagens em JSON
+- Identificação clara do limite excedido
+
+---
+
+**Última execução**: 2025-11-13 (data atual)
+**Última ação**: Implementação das Fases 6, 7 e 10 - Services, Resources e Rate Limiting
 **Commits**:
 
 - f56ee1f - Add authentication system for Admin and Integration APIs

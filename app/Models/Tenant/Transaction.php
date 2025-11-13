@@ -12,64 +12,23 @@ use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
- * @property int $id
- * @property string $uuid
- * @property int $account_id
- * @property int|null $app_id
- * @property int $wallet_id
- * @property int $currency_id
- * @property int $transaction_status_id
- * @property string $type
- * @property string $amount
- * @property string $fee
- * @property string $net_amount
- * @property string|null $payment_method
- * @property string|null $external_id
- * @property string|null $description
- * @property array|null $metadata
- * @property int|null $related_transaction_id
- * @property \Illuminate\Support\Carbon|null $completed_at
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property \Illuminate\Support\Carbon|null $deleted_at
- * @property-read Account $account
+ * @property-read Account|null $account
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Activitylog\Models\Activity> $activities
+ * @property-read int|null $activities_count
  * @property-read App|null $app
- * @property-read Wallet $wallet
- * @property-read Currency $currency
- * @property-read TransactionStatus $transactionStatus
+ * @property-read Currency|null $currency
  * @property-read Transaction|null $relatedTransaction
  * @property-read \Illuminate\Database\Eloquent\Collection<int, Transaction> $relatedTransactions
  * @property-read int|null $related_transactions_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Activitylog\Models\Activity> $activities
- * @property-read int|null $activities_count
- *
+ * @property-read TransactionStatus|null $transactionStatus
+ * @property-read Wallet|null $wallet
+ * @method static \Database\Factories\TransactionFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Transaction newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Transaction newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Transaction onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Transaction query()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Transaction whereAccountId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Transaction whereAmount($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Transaction whereAppId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Transaction whereCompletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Transaction whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Transaction whereCurrencyId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Transaction whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Transaction whereDescription($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Transaction whereExternalId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Transaction whereFee($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Transaction whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Transaction whereMetadata($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Transaction whereNetAmount($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Transaction wherePaymentMethod($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Transaction whereRelatedTransactionId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Transaction whereTransactionStatusId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Transaction whereType($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Transaction whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Transaction whereUuid($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Transaction whereWalletId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Transaction withTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Transaction withTrashed(bool $withTrashed = true)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Transaction withoutTrashed()
- *
  * @mixin \Eloquent
  */
 class Transaction extends Model
@@ -84,9 +43,12 @@ class Transaction extends Model
      * @var list<string>
      */
     protected $fillable = [
+        'uuid',
         'account_id',
         'app_id',
         'wallet_id',
+        'origin_wallet_id',
+        'destination_wallet_id',
         'currency_id',
         'transaction_status_id',
         'type',
@@ -147,6 +109,8 @@ class Transaction extends Model
                 'account_id',
                 'app_id',
                 'wallet_id',
+                'origin_wallet_id',
+                'destination_wallet_id',
                 'currency_id',
                 'transaction_status_id',
                 'type',
@@ -218,5 +182,21 @@ class Transaction extends Model
     public function relatedTransactions(): HasMany
     {
         return $this->hasMany(Transaction::class, 'related_transaction_id');
+    }
+
+    /**
+     * Get the origin wallet for the transaction (for debits/transfers).
+     */
+    public function originWallet(): BelongsTo
+    {
+        return $this->belongsTo(Wallet::class, 'origin_wallet_id');
+    }
+
+    /**
+     * Get the destination wallet for the transaction (for credits/transfers).
+     */
+    public function destinationWallet(): BelongsTo
+    {
+        return $this->belongsTo(Wallet::class, 'destination_wallet_id');
     }
 }

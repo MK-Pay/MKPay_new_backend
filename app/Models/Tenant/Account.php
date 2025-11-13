@@ -12,65 +12,28 @@ use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
- * @property int $id
- * @property string $uuid
- * @property int $account_type_id
- * @property int|null $account_category_id
- * @property int $account_status_id
- * @property string $email
- * @property \Illuminate\Support\Carbon|null $email_verified_at
- * @property string $name
- * @property string|null $cpf
- * @property string|null $cnpj
- * @property string|null $phone
- * @property array|null $usage_types
- * @property string|null $hourly_transaction_limit
- * @property string|null $daily_transaction_limit
- * @property \Illuminate\Support\Carbon|null $verified_at
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property \Illuminate\Support\Carbon|null $deleted_at
- * @property-read AccountType $accountType
  * @property-read AccountCategory|null $accountCategory
- * @property-read AccountStatus $accountStatus
- * @property-read \Illuminate\Database\Eloquent\Collection<int, App> $apps
- * @property-read int|null $apps_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, Wallet> $wallets
- * @property-read int|null $wallets_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, Transaction> $transactions
- * @property-read int|null $transactions_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, Webhook> $webhooks
- * @property-read int|null $webhooks_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, DocumentValidation> $documentValidations
- * @property-read int|null $document_validations_count
+ * @property-read AccountStatus|null $accountStatus
+ * @property-read AccountType|null $accountType
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Activitylog\Models\Activity> $activities
  * @property-read int|null $activities_count
- *
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, App> $apps
+ * @property-read int|null $apps_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, DocumentValidation> $documentValidations
+ * @property-read int|null $document_validations_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, Transaction> $transactions
+ * @property-read int|null $transactions_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, Wallet> $wallets
+ * @property-read int|null $wallets_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, Webhook> $webhooks
+ * @property-read int|null $webhooks_count
+ * @method static \Database\Factories\AccountFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Account newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Account newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Account onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Account query()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Account whereAccountCategoryId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Account whereAccountStatusId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Account whereAccountTypeId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Account whereCnpj($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Account whereCpf($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Account whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Account whereDailyTransactionLimit($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Account whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Account whereEmail($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Account whereEmailVerifiedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Account whereHourlyTransactionLimit($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Account whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Account whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Account wherePhone($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Account whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Account whereUsageTypes($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Account whereUuid($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Account whereVerifiedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Account withTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Account withTrashed(bool $withTrashed = true)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Account withoutTrashed()
- *
  * @mixin \Eloquent
  */
 class Account extends Model

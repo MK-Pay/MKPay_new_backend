@@ -7,39 +7,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
- * @property int $id
- * @property int $account_id
- * @property string $document_type
- * @property string $document_number
- * @property string $status
- * @property array|null $validation_data
- * @property string|null $rejection_reason
- * @property int|null $validated_by
- * @property \Illuminate\Support\Carbon|null $validated_at
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property \Illuminate\Support\Carbon|null $deleted_at
- * @property-read Account $account
- *
+ * @property-read Account|null $account
  * @method static \Illuminate\Database\Eloquent\Builder<static>|DocumentValidation newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|DocumentValidation newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|DocumentValidation onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|DocumentValidation query()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|DocumentValidation whereAccountId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|DocumentValidation whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|DocumentValidation whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|DocumentValidation whereDocumentNumber($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|DocumentValidation whereDocumentType($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|DocumentValidation whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|DocumentValidation whereRejectionReason($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|DocumentValidation whereStatus($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|DocumentValidation whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|DocumentValidation whereValidatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|DocumentValidation whereValidatedBy($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|DocumentValidation whereValidationData($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|DocumentValidation withTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|DocumentValidation withTrashed(bool $withTrashed = true)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|DocumentValidation withoutTrashed()
- *
  * @mixin \Eloquent
  */
 class DocumentValidation extends Model
