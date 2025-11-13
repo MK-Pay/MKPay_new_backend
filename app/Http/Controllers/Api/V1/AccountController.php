@@ -12,6 +12,25 @@ use Illuminate\Http\Request;
 class AccountController extends Controller
 {
     /**
+     * List authenticated user's accounts
+     *
+     * GET /api/v1/accounts
+     */
+    public function index(Request $request): JsonResponse
+    {
+        $user = $request->user();
+
+        $accounts = $user->accounts()
+            ->with(['accountType', 'accountCategory', 'accountStatus', 'users'])
+            ->get();
+
+        return response()->json([
+            'success' => true,
+            'data' => $accounts,
+        ], 200);
+    }
+
+    /**
      * Get authenticated account details
      *
      * GET /api/v1/account

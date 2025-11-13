@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
@@ -23,6 +24,8 @@ use Spatie\Activitylog\Traits\LogsActivity;
  * @property-read int|null $document_validations_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, Tenant\Transaction> $transactions
  * @property-read int|null $transactions_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, User> $users
+ * @property-read int|null $users_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, Tenant\Wallet> $wallets
  * @property-read int|null $wallets_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, Tenant\Webhook> $webhooks
@@ -186,5 +189,23 @@ class Account extends Model
     public function documentValidations(): HasMany
     {
         return $this->hasMany(Tenant\DocumentValidation::class);
+    }
+
+    /**
+     * Get the users that have access to this account.
+     */
+    public function users(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class)
+            ->withPivot('is_root')
+            ->withTimestamps();
+    }
+
+    /**
+     * Get the root/owner users of this account.
+     */
+    public function rootUsers(): BelongsToMany
+    {
+        return $this->users()->wherePivot('is_root', true);
     }
 }

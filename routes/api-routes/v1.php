@@ -2,10 +2,14 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\V1\AppController;
+use App\Http\Controllers\Api\V1\AccountController;
 
 Route::prefix('auth')->name('auth.')->group(__DIR__ . '/api-auth.php');
 
 Route::middleware(['auth:sanctum'])->group(function (): void {
+    // Account Routes (User authenticated)
+    Route::get('/accounts', [AccountController::class, 'index'])->name('accounts.index');
+
     Route::apiResource('apps', AppController::class)->parameters(['apps' => 'appId']);
     Route::post('/apps/{appId}/activate', [AppController::class, 'activate'])->name('apps.activate');
     Route::post('/apps/{appId}/deactivate', [AppController::class, 'deactivate'])->name('apps.deactivate');
