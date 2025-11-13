@@ -3,15 +3,12 @@
 namespace Tests\Feature;
 
 use App\Mail\ErrorReportMail;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Test;
 use RuntimeException;
 use Tests\TestCase;
 
 class ErrorReportMailTest extends TestCase
 {
-    use RefreshDatabase;
-
     #[Test]
     public function itCreatesErrorReportMailWithExceptionAndContext(): void
     {
