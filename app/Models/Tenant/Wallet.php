@@ -18,6 +18,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
  * @property-read App|null $app
  * @property-read \Illuminate\Database\Eloquent\Collection<int, WalletBalance> $balances
  * @property-read int|null $balances_count
+ * @property-read Currency|null $currency
  * @property-read \Illuminate\Database\Eloquent\Collection<int, Transaction> $transactions
  * @property-read int|null $transactions_count
  * @method static \Database\Factories\WalletFactory factory($count = null, $state = [])

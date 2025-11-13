@@ -4,6 +4,7 @@ namespace Tests\Unit\Models;
 
 use App\Models\Tenant\Account;
 use App\Models\Tenant\App;
+use App\Models\Tenant\Currency;
 use App\Models\Tenant\Transaction;
 use App\Models\Tenant\Wallet;
 use Illuminate\Support\Str;
@@ -39,10 +40,12 @@ class WalletTest extends TenantTestCase
     {
         $account = Account::factory()->create();
         $app = App::factory()->create();
+        $currency = Currency::factory()->create();
 
         $data = [
             'account_id' => $account->id,
             'app_id' => $app->id,
+            'currency_id' => $currency->id,
             'is_main' => true,
             'is_active' => true,
         ];
@@ -51,6 +54,7 @@ class WalletTest extends TenantTestCase
 
         $this->assertEquals($account->id, $wallet->account_id);
         $this->assertEquals($app->id, $wallet->app_id);
+        $this->assertEquals($currency->id, $wallet->currency_id);
         $this->assertTrue($wallet->is_main);
         $this->assertTrue($wallet->is_active);
     }

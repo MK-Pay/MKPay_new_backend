@@ -15,8 +15,11 @@ use Spatie\Activitylog\Traits\LogsActivity;
  * @property-read Account|null $account
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Activitylog\Models\Activity> $activities
  * @property-read int|null $activities_count
+ * @property string $uuid
  * @property-read App|null $app
  * @property-read Currency|null $currency
+ * @property-read Wallet|null $destinationWallet
+ * @property-read Wallet|null $originWallet
  * @property-read Transaction|null $relatedTransaction
  * @property-read \Illuminate\Database\Eloquent\Collection<int, Transaction> $relatedTransactions
  * @property-read int|null $related_transactions_count

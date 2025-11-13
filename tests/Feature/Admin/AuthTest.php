@@ -29,8 +29,8 @@ class AuthTest extends TestCase
         ]);
 
         $response->assertStatus(200);
-        $response->assertJsonStructure(['token', 'user']);
-        $this->assertNotNull($response->json('token'));
+        $response->assertJsonStructure(['success', 'message', 'data' => ['user', 'token']]);
+        $this->assertNotNull($response->json('data.token'));
     }
 
     public function testLoginWithInvalidPassword(): void
@@ -81,14 +81,14 @@ class AuthTest extends TestCase
             'password' => 'password123',
         ]);
 
-        $token = $loginResponse->json('token');
+        $token = $loginResponse->json('data.token');
 
         $response = $this->withHeader('Authorization', "Bearer {$token}")
             ->getJson('/admin/user');
 
         $response->assertStatus(200);
-        $response->assertJsonStructure(['id', 'name', 'email']);
-        $response->assertJsonPath('email', 'admin@test.com');
+        $response->assertJsonStructure(['success', 'data' => ['user' => ['id', 'name', 'email']]]);
+        $response->assertJsonPath('data.user.email', 'admin@test.com');
     }
 
     public function testGetUserInfoWithoutToken(): void
@@ -113,7 +113,7 @@ class AuthTest extends TestCase
             'password' => 'password123',
         ]);
 
-        $token = $loginResponse->json('token');
+        $token = $loginResponse->json('data.token');
 
         $response = $this->withHeader('Authorization', "Bearer {$token}")
             ->postJson('/admin/logout');
@@ -129,7 +129,7 @@ class AuthTest extends TestCase
             'password' => 'password123',
         ]);
 
-        $token = $loginResponse->json('token');
+        $token = $loginResponse->json('data.token');
 
         // Logout
         $this->withHeader('Authorization', "Bearer {$token}")
@@ -154,8 +154,8 @@ class AuthTest extends TestCase
             'password' => 'password123',
         ]);
 
-        $token1 = $login1->json('token');
-        $token2 = $login2->json('token');
+        $token1 = $login1->json('data.token');
+        $token2 = $login2->json('data.token');
 
         // Both tokens should be different
         $this->assertNotEquals($token1, $token2);

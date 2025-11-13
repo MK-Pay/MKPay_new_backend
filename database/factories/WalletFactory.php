@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Tenant\Account;
 use App\Models\Tenant\App;
+use App\Models\Tenant\Currency;
 use App\Models\Tenant\Wallet;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -29,6 +30,7 @@ class WalletFactory extends Factory
         return [
             'account_id' => Account::factory(),
             'app_id' => App::factory(),
+            'currency_id' => Currency::factory(),
             'is_main' => false,
             'is_active' => true,
         ];
