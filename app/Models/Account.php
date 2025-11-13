@@ -51,6 +51,7 @@ class Account extends Model
      * @var list<string>
      */
     protected $fillable = [
+        'tenant_id',
         'account_type_id',
         'account_category_id',
         'account_status_id',

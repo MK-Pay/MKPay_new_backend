@@ -10,11 +10,14 @@ Route::middleware(['auth:sanctum'])->group(function (): void {
     // Account Routes (User authenticated)
     Route::get('/accounts', [AccountController::class, 'index'])->name('accounts.index');
 
-    Route::apiResource('apps', AppController::class)->parameters(['apps' => 'appId']);
-    Route::post('/apps/{appId}/activate', [AppController::class, 'activate'])->name('apps.activate');
-    Route::post('/apps/{appId}/deactivate', [AppController::class, 'deactivate'])->name('apps.deactivate');
-    Route::get('/apps/{appId}/tokens', [AppController::class, 'tokens'])->name('apps.tokens.index');
-    Route::post('/apps/{appId}/tokens', [AppController::class, 'createToken'])->name('apps.tokens.create');
-    Route::put('/apps/{appId}/tokens/{tokenId}', [AppController::class, 'updateToken'])->name('apps.tokens.update');
-    Route::delete('/apps/{appId}/tokens/{tokenId}', [AppController::class, 'revokeToken'])->name('apps.tokens.revoke');
+    // Routes requiring account context (X-Account-Uuid header)
+    Route::middleware('init.tenant')->group(function (): void {
+        Route::apiResource('apps', AppController::class)->parameters(['apps' => 'appId']);
+        Route::post('/apps/{appId}/activate', [AppController::class, 'activate'])->name('apps.activate');
+        Route::post('/apps/{appId}/deactivate', [AppController::class, 'deactivate'])->name('apps.deactivate');
+        Route::get('/apps/{appId}/tokens', [AppController::class, 'tokens'])->name('apps.tokens.index');
+        Route::post('/apps/{appId}/tokens', [AppController::class, 'createToken'])->name('apps.tokens.create');
+        Route::put('/apps/{appId}/tokens/{tokenId}', [AppController::class, 'updateToken'])->name('apps.tokens.update');
+        Route::delete('/apps/{appId}/tokens/{tokenId}', [AppController::class, 'revokeToken'])->name('apps.tokens.revoke');
+    });
 });

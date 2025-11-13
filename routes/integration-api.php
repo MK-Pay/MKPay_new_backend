@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware(['auth.integration'])->group(function (): void {
+Route::middleware(['auth.integration', 'init.tenant'])->group(function (): void {
     // Account Routes (Integration API - app authentication)
     Route::get('/account', [AccountController::class, 'show'])->name('account.show');
     Route::put('/account', [AccountController::class, 'update'])->name('account.update');

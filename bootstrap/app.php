@@ -50,6 +50,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'verified' => App\Http\Middleware\EnsureEmailIsVerified::class,
             'auth.integration' => App\Http\Middleware\AuthenticateIntegrationApi::class,
             'permission' => App\Http\Middleware\CheckTokenPermission::class,
+            'init.tenant' => App\Http\Middleware\InitializeTenantFromAccount::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

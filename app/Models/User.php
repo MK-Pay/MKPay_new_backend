@@ -9,6 +9,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Database\Eloquent\Collection;
 
 /**
  * @suppress PHP0413
@@ -20,15 +21,15 @@ use Spatie\Permission\Traits\HasRoles;
  * @property string|null $remember_token
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, Account> $accounts
+ * @property-read Collection<int, Account> $accounts
  * @property-read int|null $accounts_count
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
  * @property-read int|null $notifications_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Permission\Models\Permission> $permissions
+ * @property-read Collection<int, \Spatie\Permission\Models\Permission> $permissions
  * @property-read int|null $permissions_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Permission\Models\Role> $roles
+ * @property-read Collection<int, \Spatie\Permission\Models\Role> $roles
  * @property-read int|null $roles_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \Laravel\Sanctum\PersonalAccessToken> $tokens
+ * @property-read Collection<int, \Laravel\Sanctum\PersonalAccessToken> $tokens
  * @property-read int|null $tokens_count
  * @method static \Database\Factories\UserFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User newModelQuery()
@@ -106,5 +107,24 @@ class User extends Authenticatable
     public function rootAccounts(): BelongsToMany
     {
         return $this->accounts()->wherePivot('is_root', true);
+    }
+
+    public function attachAccount(
+        Account $account,
+        array $attributes = [],
+        bool $returnCollection = false,
+        ?bool $touch = null,
+    ): BelongsToMany|Collection|User {
+        if ($this->accounts()->where('accounts.id', $account?->id)->exists()) {
+            return $this->accounts();
+        }
+
+        $this->accounts()->attach($account, $attributes, touch: $touch ?? true);
+
+        if ($returnCollection) {
+            return $this->accounts;
+        }
+
+        return $this->accounts();
     }
 }
