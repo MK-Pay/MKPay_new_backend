@@ -2,6 +2,7 @@
 
 namespace App\Models\Tenant;
 
+use App\Models\Account;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -37,6 +38,7 @@ class App extends Model
     use HasFactory;
     use LogsActivity;
     use SoftDeletes;
+    use \Illuminate\Database\Eloquent\Concerns\HasUuids;
 
     /**
      * The attributes that are mass assignable.
@@ -139,5 +141,10 @@ class App extends Model
     public function webhooks(): HasMany
     {
         return $this->hasMany(Webhook::class);
+    }
+
+    public function getTable()
+    {
+        return 'apps';
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\Tenant;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -17,15 +17,15 @@ use Spatie\Activitylog\Traits\LogsActivity;
  * @property-read AccountType|null $accountType
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Activitylog\Models\Activity> $activities
  * @property-read int|null $activities_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, App> $apps
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, Tenant\App> $apps
  * @property-read int|null $apps_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, DocumentValidation> $documentValidations
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, Tenant\DocumentValidation> $documentValidations
  * @property-read int|null $document_validations_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, Transaction> $transactions
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, Tenant\Transaction> $transactions
  * @property-read int|null $transactions_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, Wallet> $wallets
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, Tenant\Wallet> $wallets
  * @property-read int|null $wallets_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, Webhook> $webhooks
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, Tenant\Webhook> $webhooks
  * @property-read int|null $webhooks_count
  * @method static \Database\Factories\AccountFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Account newModelQuery()
@@ -153,7 +153,7 @@ class Account extends Model
      */
     public function apps(): HasMany
     {
-        return $this->hasMany(App::class);
+        return $this->hasMany(Tenant\App::class);
     }
 
     /**
@@ -161,7 +161,7 @@ class Account extends Model
      */
     public function wallets(): HasMany
     {
-        return $this->hasMany(Wallet::class);
+        return $this->hasMany(Tenant\Wallet::class);
     }
 
     /**
@@ -169,7 +169,7 @@ class Account extends Model
      */
     public function transactions(): HasMany
     {
-        return $this->hasMany(Transaction::class);
+        return $this->hasMany(Tenant\Transaction::class);
     }
 
     /**
@@ -177,7 +177,7 @@ class Account extends Model
      */
     public function webhooks(): HasMany
     {
-        return $this->hasMany(Webhook::class);
+        return $this->hasMany(Tenant\Webhook::class);
     }
 
     /**
@@ -185,6 +185,6 @@ class Account extends Model
      */
     public function documentValidations(): HasMany
     {
-        return $this->hasMany(DocumentValidation::class);
+        return $this->hasMany(Tenant\DocumentValidation::class);
     }
 }

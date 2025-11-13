@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\Tenant\AccountStatus;
+use App\Models\AccountStatus;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**

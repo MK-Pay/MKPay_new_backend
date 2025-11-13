@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Api\V1;
 
-use App\Models\Tenant\Account;
+use App\Models\Account;
 use App\Models\Tenant\App;
 use App\Models\Tenant\Webhook;
 use Illuminate\Foundation\Testing\RefreshDatabase;

@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Models\Tenant\Account;
+use App\Models\Account;
 
 class DocumentValidationService
 {

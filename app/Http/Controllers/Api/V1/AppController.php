@@ -1,10 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+declare(strict_types=1);
+
+namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Apps\CreateTokenRequest;
-use App\Http\Requests\Admin\Apps\StoreAppRequest;
+use App\Http\Requests\Api\V1\Apps\StoreAppRequest;
 use App\Models\Account;
 use App\Models\Tenant\App;
 use App\Models\Tenant\AppSecretToken;

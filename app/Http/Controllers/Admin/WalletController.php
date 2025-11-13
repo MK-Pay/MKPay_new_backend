@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Wallets\AdjustBalanceRequest;
 use App\Http\Requests\Admin\Wallets\StoreWalletRequest;
-use App\Models\Tenant\Account;
+use App\Models\Account;
 use App\Models\Tenant\Wallet;
 use App\Services\WalletService;
 use Illuminate\Http\JsonResponse;

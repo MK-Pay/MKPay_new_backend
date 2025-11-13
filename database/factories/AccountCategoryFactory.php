@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\Tenant\AccountCategory;
+use App\Models\AccountCategory;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 

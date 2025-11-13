@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\Tenant\Account;
+use App\Models\Account;
 use App\Models\Tenant\App;
 use App\Models\Tenant\Currency;
 use App\Models\Tenant\Transaction;

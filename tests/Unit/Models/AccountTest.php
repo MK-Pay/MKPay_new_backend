@@ -2,10 +2,10 @@
 
 namespace Tests\Unit\Models;
 
-use App\Models\Tenant\Account;
-use App\Models\Tenant\AccountCategory;
-use App\Models\Tenant\AccountStatus;
-use App\Models\Tenant\AccountType;
+use App\Models\Account;
+use App\Models\AccountCategory;
+use App\Models\AccountStatus;
+use App\Models\AccountType;
 use App\Models\Tenant\App;
 use App\Models\Tenant\Transaction;
 use App\Models\Tenant\Wallet;

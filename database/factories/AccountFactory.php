@@ -2,10 +2,10 @@
 
 namespace Database\Factories;
 
-use App\Models\Tenant\Account;
-use App\Models\Tenant\AccountCategory;
-use App\Models\Tenant\AccountStatus;
-use App\Models\Tenant\AccountType;
+use App\Models\Account;
+use App\Models\AccountCategory;
+use App\Models\AccountStatus;
+use App\Models\AccountType;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**

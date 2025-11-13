@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Models\Tenant\Account;
+use App\Models\Account;
 use App\Models\Tenant\Transaction;
 use App\Models\Tenant\TransactionStatus;
 use App\Models\Tenant\TransactionType;

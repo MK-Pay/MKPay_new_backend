@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Admin;
 
-use App\Models\Tenant\Account;
+use App\Models\Account;
 use App\Models\Tenant\App;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;

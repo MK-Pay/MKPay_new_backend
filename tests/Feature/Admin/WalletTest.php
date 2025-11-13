@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Admin;
 
-use App\Models\Tenant\Account;
+use App\Models\Account;
 use App\Models\Tenant\Currency;
 use App\Models\Tenant\Wallet;
 use App\Models\User;
