@@ -95,7 +95,7 @@ class User extends Authenticatable
      */
     public function accounts(): BelongsToMany
     {
-        return $this->belongsToMany(Account::class)
+        return $this->belongsToMany(Account::class, 'user_account')
             ->withPivot('is_root')
             ->withTimestamps();
     }
