@@ -762,16 +762,55 @@ Implementado via RateLimitServiceProvider com 7 limitadores:
   - ✅ Tema light
   - ✅ Logo e título customizados
 
+---
+
+## ✅ Concluído (Fase 5: User-Account Relationship)
+
+### Implementação de Relacionamento Many-to-Many com Pivot Data
+
+- [x] **Criado migration `user_account` pivot table**
+  - ✅ Estrutura: user_id, account_id, is_root, timestamps
+  - ✅ Constraint: unique (user_id, account_id)
+  - ✅ Indexes: user_id, account_id, is_root
+  - ✅ Cascade delete on both foreign keys
+
+- [x] **Atualizados modelos User e Account**
+  - ✅ User.accounts() - BelongsToMany com pivot table 'user_account'
+  - ✅ User.rootAccounts() - Helper para filtrar usuários root (is_root = true)
+  - ✅ Account.users() - BelongsToMany inverso
+  - ✅ Account.rootUsers() - Helper para filtrar users root
+  - ✅ Todos os relacionamentos incluem withPivot('is_root') e withTimestamps()
+
+- [x] **Adicionado novo endpoint de API**
+  - ✅ GET /api/v1/accounts - Lista accounts do usuário autenticado (Sanctum)
+  - ✅ Carrega relacionamentos: accountType, accountCategory, accountStatus, users
+  - ✅ Inclui pivot data (is_root) na resposta
+  - ✅ Autenticação obrigatória
+
+- [x] **Testes completos (10 testes, 100% passing)**
+  - ✅ 4 testes unitários em tests/Unit/Models/UserTest.php
+    - testUserHasManyAccounts()
+    - testUserHasRootAccounts()
+    - testUserAccountsPivotIncludesIsRoot()
+    - testUserCanBeRootOfMultipleAccounts()
+  - ✅ 6 testes feature em tests/Feature/Api/V1/UserAccountsTest.php
+    - testListAccountsWithoutAuthentication() - Rejeita sem token
+    - testListAccountsWithValidToken() - Retorna accounts do usuário
+    - testListAccountsIncludesAccountRelationships() - Carrega dados relacionados
+    - testListOnlyUserOwnedAccounts() - Isola por usuário
+    - testListAccountsIncludesPivotData() - Inclui is_root no response
+    - testEmptyAccountsList() - Trata lista vazia
+
+**Casos de uso habilitados:**
+- Um usuário pode estar relacionado a múltiplas accounts
+- Accounts podem ter múltiplos usuários com diferentes papéis
+- is_root=true marca o usuário como dono/master da account
+- Timestamps rastreiam quando a relação foi criada/atualizada
+- Acesso granular por usuário na Integration API
+
 **Última execução**: 2025-11-13 (data atual)
-**Última ação**: Implementação das Fases 8 e 9 - Testes completos e Documentação OpenAPI
+**Última ação**: Implementação da Fase 5 - User-Account Relationship e novo endpoint
 **Commits**:
 
-- f56ee1f - Add authentication system for Admin and Integration APIs
-- 07551ea - Update EM_ANDAMENTO.md with Phase 1 completion status
-- 8f6cea8 - Add Admin API controllers for Account and App management
-- 45b5577 - Implement Wallet and Transaction admin controllers with service layer
-- d2b6f6d - Update EM_ANDAMENTO.md with Phase 2 completion status
-- 8f57741 - Implement Integration API (Phase 3) with payment processing
-- 350298c - Fix route configuration - remove duplication and simplify structure
-- e1839cf - Update EM_ANDAMENTO.md with route fixes and test status
-- 2678249 - Implement Form Requests for validation (Phase 4)
+- 3c18609 - Implement User-Account relationship with root user feature
+- cdb791d - Add tests for User-Account relationship and accounts endpoint
