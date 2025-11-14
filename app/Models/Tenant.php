@@ -33,11 +33,18 @@ class Tenant extends BaseTenant implements TenantWithDatabase
     use HasDomains;
     use HasDatabase;
 
+    protected $table = 'public.tenants';
+
     /**
      * Get the domains for the tenant.
      */
     public function domains(): HasMany
     {
         return $this->hasMany(config('tenancy.domain_model'), 'tenant_id');
+    }
+
+    public function getTable()
+    {
+        return 'public.tenants';
     }
 }

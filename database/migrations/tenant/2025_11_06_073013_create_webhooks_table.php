@@ -12,7 +12,7 @@ return new class() extends Migration {
     {
         Schema::create('webhooks', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('account_id')->constrained('accounts')->onDelete('cascade');
+            $table->foreignId('account_id')->constrained('public.accounts')->onDelete('cascade');
             $table->foreignId('app_id')->nullable()->constrained('apps')->onDelete('cascade');
             $table->string('url');
             $table->string('secret')->nullable()->comment('Secret for webhook signature verification');

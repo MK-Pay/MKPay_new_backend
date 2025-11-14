@@ -13,7 +13,7 @@ return new class() extends Migration {
         Schema::create('user_account', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->foreignId('account_id')->constrained('accounts')->onDelete('cascade');
+            $table->foreignId('account_id')->constrained('public.accounts')->onDelete('cascade');
             $table->boolean('is_root')->default(false)->comment('Root user is the master/owner of the account');
             $table->timestamps();
 

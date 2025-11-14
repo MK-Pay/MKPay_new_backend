@@ -12,7 +12,7 @@ return new class() extends Migration {
     {
         Schema::create('document_validations', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('account_id')->constrained('accounts')->onDelete('cascade');
+            $table->foreignId('account_id')->constrained('public.accounts')->onDelete('cascade');
             $table->string('document_type', 20)->comment('CPF or CNPJ');
             $table->string('document_number', 14);
             $table->string('status', 50)->comment('pending, validated, rejected');

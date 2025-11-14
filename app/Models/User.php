@@ -127,4 +127,9 @@ class User extends Authenticatable
 
         return $this->accounts();
     }
+
+    public function getTable()
+    {
+        return 'public.users';
+    }
 }

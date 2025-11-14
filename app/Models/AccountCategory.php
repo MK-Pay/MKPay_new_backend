@@ -58,4 +58,9 @@ class AccountCategory extends Model
     {
         return $this->hasMany(Account::class);
     }
+
+    public function getTable()
+    {
+        return 'public.account_categories';
+    }
 }

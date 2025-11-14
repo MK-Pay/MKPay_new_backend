@@ -13,7 +13,7 @@ return new class() extends Migration {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
             $table->uuid('uuid')->unique();
-            $table->foreignId('account_id')->constrained('accounts')->onDelete('restrict');
+            $table->foreignId('account_id')->constrained('public.accounts')->onDelete('restrict');
             $table->foreignId('app_id')->nullable()->constrained('apps')->onDelete('restrict');
             $table->foreignId('wallet_id')->constrained('wallets')->onDelete('restrict');
             $table->foreignId('currency_id')->constrained('currencies')->onDelete('restrict');

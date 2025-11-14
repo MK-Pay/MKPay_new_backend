@@ -24,6 +24,7 @@ class InitializeTenantFromAccount
         $accountId = $request->header('X-Account-Id');
 
         // Try to find account by UUID first, then by ID
+        /** @var ?Account $account */
         $account = null;
 
         if ($accountUuid) {

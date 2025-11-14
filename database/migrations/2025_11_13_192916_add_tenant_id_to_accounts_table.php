@@ -22,8 +22,8 @@ return new class() extends Migration {
     public function down(): void
     {
         Schema::table('accounts', function (Blueprint $table) {
-            $table->dropColumn('tenant_id');
             $table->dropIndex(['tenant_id']);
+            $table->dropColumn('tenant_id');
         });
     }
 };

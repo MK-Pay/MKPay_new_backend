@@ -11,7 +11,10 @@ Route::middleware(['auth:sanctum'])->group(function (): void {
     Route::get('/accounts', [AccountController::class, 'index'])->name('accounts.index');
 
     // Routes requiring account context (X-Account-Uuid header)
-    Route::middleware('init.tenant')->group(function (): void {
+    Route::middleware([
+        'init.tenant',
+        //
+    ])->group(function (): void {
         Route::apiResource('apps', AppController::class)->parameters(['apps' => 'appId']);
         Route::post('/apps/{appId}/activate', [AppController::class, 'activate'])->name('apps.activate');
         Route::post('/apps/{appId}/deactivate', [AppController::class, 'deactivate'])->name('apps.deactivate');

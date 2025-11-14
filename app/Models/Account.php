@@ -19,6 +19,8 @@ use Spatie\Activitylog\Traits\LogsActivity;
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Activitylog\Models\Activity> $activities
  * @property-read int|null $activities_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, Tenant\App> $apps
+ * @property string|int $id
+ * @property string $uuid
  * @property-read int|null $apps_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, Tenant\DocumentValidation> $documentValidations
  * @property-read int|null $document_validations_count
@@ -208,5 +210,10 @@ class Account extends Model
     public function rootUsers(): BelongsToMany
     {
         return $this->users()->wherePivot('is_root', true);
+    }
+
+    public function getTable()
+    {
+        return 'public.accounts';
     }
 }

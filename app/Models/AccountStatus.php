@@ -69,6 +69,6 @@ class AccountStatus extends Model
 
     public function getTable()
     {
-        return 'account_status';
+        return 'public.account_status';
     }
 }
