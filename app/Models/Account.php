@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
+use Stancl\Tenancy\Database\Concerns\BelongsToTenant;
 
 /**
  * @property-read AccountCategory|null $accountCategory
@@ -20,6 +21,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
  * @property-read int|null $activities_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, Tenant\App> $apps
  * @property string|int $id
+ * @property string $tenant_id
  * @property string $uuid
  * @property-read int|null $apps_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, Tenant\DocumentValidation> $documentValidations
@@ -46,6 +48,7 @@ class Account extends Model
     use HasFactory;
     use LogsActivity;
     use SoftDeletes;
+    use BelongsToTenant;
 
     /**
      * The attributes that are mass assignable.
@@ -95,6 +98,46 @@ class Account extends Model
                 $account->uuid = (string) Str::uuid();
             }
         });
+
+        static::created(function (Account $account) {
+            if (empty($account->uuid)) {
+                $account->uuid = (string) Str::uuid();
+            }
+
+            $tenant = Tenant::create([
+                'id' => $account->uuid,
+                'account_uuid' => $account->uuid,
+                'tenancy_db_name' => 'tenant_' . preg_replace('/\W+/', '', strtolower("{$account->uuid}")),
+                'plan' => 'pro',
+            ]);
+
+            $account->tenant_id = $tenant->id;
+        });
+    }
+
+    public function getTenantOrCreate(): Tenant
+    {
+        if (empty($this->uuid)) {
+            $this->uuid = (string) Str::uuid();
+        }
+
+        $tenant = Tenant::firstOrCreate(['id' => $this->uuid], [
+            'id' => $this->uuid,
+            'account_uuid' => $this->uuid,
+            'tenancy_db_name' => 'tenant_' . preg_replace('/\W+/', '', strtolower("{$this->uuid}")),
+            'plan' => 'pro',
+        ]);
+
+        if (empty($this->tenant_id)) {
+            $this->tenant_id = $tenant->id;
+        }
+
+        if ($this->isDirty()) {
+            $this->save();
+            $this->fresh();
+        }
+
+        return $tenant;
     }
 
     /**

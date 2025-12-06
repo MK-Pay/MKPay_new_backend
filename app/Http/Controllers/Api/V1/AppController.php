@@ -64,7 +64,7 @@ class AppController extends Controller
     {
         $account = Account::where('uuid', $accountUuid)->first();
 
-        if (! $account) {
+        if (!$account) {
             return response()->json([
                 'success' => false,
                 'message' => 'Account not found.',
@@ -87,6 +87,10 @@ class AppController extends Controller
      */
     public function store(StoreAppRequest $request): JsonResponse
     {
+        $accountUuid = $request->header('X-Account-Uuid');
+
+        abort_if(!$accountUuid || tenant()?->id !== $accountUuid, 403);
+
         $validated = $request->validated();
 
         // Find account
@@ -120,7 +124,7 @@ class AppController extends Controller
             ->with(['account', 'secretTokens'])
             ->first();
 
-        if (! $app) {
+        if (!$app) {
             return response()->json([
                 'success' => false,
                 'message' => 'App not found.',
@@ -141,7 +145,7 @@ class AppController extends Controller
     {
         $app = App::where('app_id', $appId)->first();
 
-        if (! $app) {
+        if (!$app) {
             return response()->json([
                 'success' => false,
                 'message' => 'App not found.',
@@ -172,7 +176,7 @@ class AppController extends Controller
     {
         $app = App::where('app_id', $appId)->first();
 
-        if (! $app) {
+        if (!$app) {
             return response()->json([
                 'success' => false,
                 'message' => 'App not found.',
@@ -195,7 +199,7 @@ class AppController extends Controller
     {
         $app = App::where('app_id', $appId)->first();
 
-        if (! $app) {
+        if (!$app) {
             return response()->json([
                 'success' => false,
                 'message' => 'App not found.',
@@ -219,7 +223,7 @@ class AppController extends Controller
     {
         $app = App::where('app_id', $appId)->first();
 
-        if (! $app) {
+        if (!$app) {
             return response()->json([
                 'success' => false,
                 'message' => 'App not found.',
@@ -243,7 +247,7 @@ class AppController extends Controller
     {
         $app = App::where('app_id', $appId)->first();
 
-        if (! $app) {
+        if (!$app) {
             return response()->json([
                 'success' => false,
                 'message' => 'App not found.',
@@ -266,7 +270,7 @@ class AppController extends Controller
     {
         $app = App::where('app_id', $appId)->first();
 
-        if (! $app) {
+        if (!$app) {
             return response()->json([
                 'success' => false,
                 'message' => 'App not found.',
@@ -310,7 +314,7 @@ class AppController extends Controller
     {
         $app = App::where('app_id', $appId)->first();
 
-        if (! $app) {
+        if (!$app) {
             return response()->json([
                 'success' => false,
                 'message' => 'App not found.',
@@ -322,7 +326,7 @@ class AppController extends Controller
             ->where('app_id', $app->id)
             ->first();
 
-        if (! $token) {
+        if (!$token) {
             return response()->json([
                 'success' => false,
                 'message' => 'Token not found.',
@@ -354,7 +358,7 @@ class AppController extends Controller
     {
         $app = App::where('app_id', $appId)->first();
 
-        if (! $app) {
+        if (!$app) {
             return response()->json([
                 'success' => false,
                 'message' => 'App not found.',
@@ -366,7 +370,7 @@ class AppController extends Controller
             ->where('app_id', $app->id)
             ->first();
 
-        if (! $token) {
+        if (!$token) {
             return response()->json([
                 'success' => false,
                 'message' => 'Token not found.',

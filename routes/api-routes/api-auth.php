@@ -8,13 +8,14 @@ use App\Http\Controllers\Auth\VerifyEmailController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\EmailVerificationNotificationController;
+use App\Http\Controllers\Api\V1\CurrentUserController;
 
 Route::post('/register', [RegisteredUserController::class, 'store'])->name('register');
 Route::post('/login', [LoginController::class, 'store'])->name('login');
 Route::post('/logout', [LoginController::class, 'destroy'])->middleware('auth:sanctum')->name('logout');
 
-Route::get('/user', fn (Request $request) => $request->user())->middleware('auth:sanctum')->name('auth_user');
-Route::middleware(['auth:sanctum'])->any('/me', fn (Request $request) => $request->user())->name('me');
+Route::match(['get', 'post'], '/user', CurrentUserController::class)->middleware('auth:sanctum')->name('auth_user_info');
+Route::middleware(['auth:sanctum'])->any('/me', CurrentUserController::class)->name('me');
 Route::middleware(['auth:sanctum'])->any('/token-is-valid', fn (Request $request) => [
     'success' => boolval($request->user()?->name),
 ])->name('token-is-valid');

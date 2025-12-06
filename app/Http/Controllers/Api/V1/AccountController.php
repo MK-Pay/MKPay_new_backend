@@ -21,7 +21,8 @@ class AccountController extends Controller
         $user = $request->user();
 
         $accounts = $user->accounts()
-            ->with(['accountType', 'accountCategory', 'accountStatus', 'users'])
+            ->with(['accountType', 'accountCategory', 'accountStatus', 'users', 'tenant'])
+            ->whereHas('tenant')
             ->get();
 
         return response()->json([

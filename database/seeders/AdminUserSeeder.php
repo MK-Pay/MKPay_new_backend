@@ -24,11 +24,13 @@ class AdminUserSeeder extends Seeder
             ]
         );
 
-        // Assign super_admin role
-        $superAdminRole = Role::firstWhere('name', 'super_admin');
+        if (class_exists(Role::class)) {
+            // Assign super_admin role
+            $superAdminRole = Role::firstWhere('name', 'super_admin');
 
-        if ($superAdminRole && ! $admin->hasRole('super_admin')) {
-            $admin->assignRole($superAdminRole);
+            if ($superAdminRole && ! $admin->hasRole('super_admin')) {
+                $admin->assignRole($superAdminRole);
+            }
         }
 
         $this->command->info('Admin user created/updated successfully!');

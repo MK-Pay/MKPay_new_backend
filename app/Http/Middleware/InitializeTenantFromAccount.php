@@ -21,17 +21,10 @@ class InitializeTenantFromAccount
     {
         // Get account UUID from header (sent by frontend)
         $accountUuid = $request->header('X-Account-Uuid');
-        $accountId = $request->header('X-Account-Id');
 
         // Try to find account by UUID first, then by ID
         /** @var ?Account $account */
-        $account = null;
-
-        if ($accountUuid) {
-            $account = Account::where('uuid', $accountUuid)->first();
-        } elseif ($accountId) {
-            $account = Account::find($accountId);
-        }
+        $account = \Str::isUuid($accountUuid) ? Account::where('uuid', $accountUuid)->first() : null;
 
         // If no account found via headers, check if request has authenticated_account (from AuthenticateIntegrationApi middleware)
         if (! $account && $request->has('authenticated_account')) {

@@ -8,7 +8,7 @@ Route::prefix('auth')->name('auth.')->group(__DIR__ . '/api-auth.php');
 
 Route::middleware(['auth:sanctum'])->group(function (): void {
     // Account Routes (User authenticated)
-    Route::get('/accounts', [AccountController::class, 'index'])->name('accounts.index');
+    Route::match(['get', 'post'], '/accounts', [AccountController::class, 'index'])->name('accounts.index');
 
     // Routes requiring account context (X-Account-Uuid header)
     Route::middleware([

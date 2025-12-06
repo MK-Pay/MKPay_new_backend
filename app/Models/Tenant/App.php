@@ -148,4 +148,10 @@ class App extends Model
     {
         return 'apps';
     }
+    public function uniqueIds()
+    {
+        return [
+            'app_id',
+        ];
+    }
 }
